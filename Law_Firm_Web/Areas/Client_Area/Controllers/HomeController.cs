@@ -2,8 +2,9 @@
 using Law_Firm_Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Law_Firm_Web.Controllers
+namespace Law_Firm_Web.Areas.Client_Area.Controllers
 {
+    [Area("Client_Area")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

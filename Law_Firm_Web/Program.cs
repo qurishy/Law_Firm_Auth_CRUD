@@ -13,6 +13,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AplicationDB>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+
 // Configure Identity with enum-based Role
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -63,7 +65,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{area=Client_Area}/{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 
