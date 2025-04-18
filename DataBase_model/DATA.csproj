@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Data_Model\Law_Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\Admin_repo\" />
+  </ItemGroup>
+
 </Project>
