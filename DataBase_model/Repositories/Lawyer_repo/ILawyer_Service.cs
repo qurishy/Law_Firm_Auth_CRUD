@@ -11,7 +11,7 @@ namespace DATA.Repositories.Lawyer_repo
 {
     public interface ILawyer_Service : IRepository<Personnel>
     {
-        Task<IdentityResult> CreatePersonnelAsync(Personnel personnel, string password);
+        Task<ApplicationUser> CreatePersonnelAsync(Personnel personnel, string password);
         
         
         Task UpdatePersonnel(Personnel personnel);

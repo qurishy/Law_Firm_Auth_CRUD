@@ -22,8 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin_Area\Controllers\" />
-    <Folder Include="Areas\Admin_Area\Views\" />
     <Folder Include="Areas\Lawyer_Area\Controllers\" />
     <Folder Include="Areas\Lawyer_Area\Views\" />
   </ItemGroup>

@@ -11,7 +11,7 @@ namespace DATA.Repositories.Client_repo
 {
     public interface IClient_Service : IRepository<Client>
     {
-        Task<IdentityResult> CreateClientAsync(Client client, string password);
+        Task<ApplicationUser> CreateClientAsync(Client client, string password);
      
         Task UpdateClient(Client client);
 

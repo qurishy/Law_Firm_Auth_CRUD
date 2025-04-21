@@ -11,6 +11,9 @@ namespace Law_Model.Models
 {
     public class ApplicationUser : IdentityUser
     {
+     
+
+
         [Required]
         [StringLength(50)]
         public string FirstName { get; set; }

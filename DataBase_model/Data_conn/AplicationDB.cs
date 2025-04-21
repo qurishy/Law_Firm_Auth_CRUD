@@ -1,4 +1,5 @@
 ﻿using Law_Model.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,6 +19,7 @@ namespace DataAccess.Data
         }
 
         // Register your entity models as DbSets
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Client> Clients { get; set; }
 
         public DbSet<Personnel> Personnel { get; set; }
@@ -59,6 +61,10 @@ namespace DataAccess.Data
                 .WithMany(cl => cl.Cases)
                 .HasForeignKey(c => c.ClientId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+
+
         }
     }
 }

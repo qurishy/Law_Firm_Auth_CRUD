@@ -15,16 +15,27 @@ builder.Services.AddDbContext<AplicationDB>(options =>
 
 
 
+
+
 // Configure Identity with enum-based Role
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
+    options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 10;
-    options.Password.RequireNonAlphanumeric  = true;
-    options.SignIn.RequireConfirmedAccount = false;
+    
+    
 })
 .AddEntityFrameworkStores<AplicationDB>()
-.AddDefaultTokenProviders();
+.AddDefaultTokenProviders().AddDefaultUI();
+
+
+
+
+
+
+
+
 
 // Configure Authorization Policies
 builder.Services.AddAuthorization(options =>
@@ -37,6 +48,8 @@ builder.Services.AddAuthorization(options =>
 
 
 builder.Services.AddRazorPages();
+
+
 var app = builder.Build();
 
 
@@ -61,12 +74,28 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapStaticAssets();
+app.MapRazorPages();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{area=Client_Area}/{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{area=Client_Area}/{controller=Home}/{action=Index}/{id?}")
+//    .WithStaticAssets();
+
+app.UseEndpoints(endpoints =>
+{
+  
+
+    endpoints.MapControllerRoute(
+        name: "areas",
+        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
+
+
 
 
 app.Run();

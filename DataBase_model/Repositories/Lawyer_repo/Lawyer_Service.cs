@@ -23,7 +23,7 @@ namespace DATA.Repositories.Lawyer_repo
         }
 
         //we are creating a new personnel
-        public async Task<IdentityResult> CreatePersonnelAsync(Personnel personnel, string password)
+        public async Task<ApplicationUser> CreatePersonnelAsync(Personnel personnel, string password)
         {
             var user = new ApplicationUser
             {
@@ -46,11 +46,11 @@ namespace DATA.Repositories.Lawyer_repo
                 personnel.User = user; // Don't need to add the User again as it's already in the DB
 
                 
-                _db.Personnel.Add(personnel);
+               await _db.Personnel.AddAsync(personnel);
                 
             }
 
-            return result;
+            return user;
 
            
         }

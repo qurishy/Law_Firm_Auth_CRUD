@@ -21,7 +21,7 @@ namespace DATA.Repositories.Client_repo
             _db = db;
             _userManager=userManager;
         }
-        public async Task<IdentityResult> CreateClientAsync(Client client, string password)
+        public async Task<ApplicationUser> CreateClientAsync(Client client, string password)
         {
             // Create the ApplicationUser first
             var user = new ApplicationUser
@@ -44,11 +44,11 @@ namespace DATA.Repositories.Client_repo
                 client.UserId = user.Id;
                 client.User = null; // Don't need to add the User again as it's already in the DB
 
-                _db.Clients.AddAsync(client);
+               await _db.Clients.AddAsync(client);
                 
             }
 
-            return result;
+            return user;
         }
 
         public async Task UpdateClient(Client client)

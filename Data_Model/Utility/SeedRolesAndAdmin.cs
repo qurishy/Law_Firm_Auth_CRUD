@@ -1,4 +1,5 @@
-﻿using Law_Model.Models;
+﻿
+using Law_Model.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
