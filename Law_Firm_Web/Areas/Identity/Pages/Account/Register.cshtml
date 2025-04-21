@@ -35,6 +35,27 @@
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
 
+            <!-- New Address Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Addresses" class="form-control" placeholder="Address" />
+                <label asp-for="Input.Addresses">Address</label>
+                <span asp-validation-for="Input.Addresses" class="text-danger"></span>
+            </div>
+
+            <!-- New Phone Number Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.phonwNumber" class="form-control" placeholder="Phone Number" />
+                <label asp-for="Input.phonwNumber">Phone Number</label>
+                <span asp-validation-for="Input.phonwNumber" class="text-danger"></span>
+            </div>
+
+            <!-- New City Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.DateOfBirth" class="form-control" type="date" />
+                <label asp-for="Input.DateOfBirth">City</label>
+                <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+            </div>
+
             <div class="mb-3">
                 <label asp-for="Input.ProfilePicture" class="form-label">Profile Picture</label>
                 <input type="file" asp-for="Input.ProfilePicture" class="form-control" accept="image/*" />
@@ -58,6 +79,7 @@
         </form>
     </div>
     <div class="col-md-4">
+        <!-- External logins section remains unchanged -->
         <section>
             <h3>Use another service to register.</h3>
             <hr />

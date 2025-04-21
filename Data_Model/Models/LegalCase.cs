@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using static Law_Model.Static_file.Static_datas;
 
 namespace Law_Model.Models
@@ -27,7 +21,7 @@ namespace Law_Model.Models
 
         public DateTime? CloseDate { get; set; }
 
-        
+
 
         // Relationships
         public int ClientId { get; set; }
@@ -39,8 +33,8 @@ namespace Law_Model.Models
 
         // Make it possible to have a team assigned to a case
         public ICollection<Documented> Documents { get; set; }
-     
+
         public ICollection<Appointment> Appointments { get; set; }
-       
+
     }
 }

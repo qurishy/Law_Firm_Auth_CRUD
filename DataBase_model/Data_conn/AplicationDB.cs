@@ -1,13 +1,6 @@
 ﻿using Law_Model.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Data
 {
@@ -25,12 +18,12 @@ namespace DataAccess.Data
         public DbSet<Personnel> Personnel { get; set; }
 
         public DbSet<LegalCase> LegalCases { get; set; }
-       
+
         public DbSet<Documented> Documents { get; set; }
-   
+
         public DbSet<Appointment> Appointments { get; set; }
 
-  
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

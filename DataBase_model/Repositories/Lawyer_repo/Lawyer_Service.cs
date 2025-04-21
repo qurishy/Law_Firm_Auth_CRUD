@@ -2,11 +2,6 @@
 using DataAccess.Repositories;
 using Law_Model.Models;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Law_Model.Static_file.Static_datas;
 
 namespace DATA.Repositories.Lawyer_repo
@@ -45,14 +40,19 @@ namespace DATA.Repositories.Lawyer_repo
                 personnel.UserId = user.Id;
                 personnel.User = user; // Don't need to add the User again as it's already in the DB
 
-                
-               await _db.Personnel.AddAsync(personnel);
-                
+
+                await _db.Personnel.AddAsync(personnel);
+
             }
 
             return user;
 
-           
+
+        }
+
+        public Task<Personnel> GetPersonnelByCaseIdAsync(int caseId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task Save()

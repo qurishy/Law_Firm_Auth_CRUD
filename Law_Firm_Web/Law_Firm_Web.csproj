@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Lawyer_Area\Controllers\" />
-    <Folder Include="Areas\Lawyer_Area\Views\" />
   </ItemGroup>
 
 </Project>

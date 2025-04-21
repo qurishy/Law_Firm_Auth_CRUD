@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Law_Model.Static_file
+﻿namespace Law_Model.Static_file
 {
-   
+
     public static class Static_datas
     {
         public enum UserRole

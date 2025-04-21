@@ -4,17 +4,10 @@
 
 using Law_Model.Models;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using static Law_Model.Static_file.Static_datas;
 
 namespace Law_Firm_Web.Areas.Identity.Pages.Account
@@ -126,23 +119,23 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
                     // Redirect based on user role
                     if (user != null)
                     {
-                        // Check if returnUrl is explicitly specified and is a local URL
-                        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                        {
-                            return LocalRedirect(returnUrl);
-                        }
+                        //// Check if returnUrl is explicitly specified and is a local URL
+                        //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                        //{
+                        //    return LocalRedirect(returnUrl);
+                        //}
 
                         // Otherwise, redirect based on role
                         switch (user.Role)
                         {
                             case UserRole.Client:
-                                return RedirectToAction("Index", "Clients", new { area = "Client_Area" });
+                                return LocalRedirect($"~/Client_Area/Clients/Index/{user.Id}");
 
                             case UserRole.Lawyer:
-                                return RedirectToAction("Index", "Home", new { area = "Lawyer_Area" });
+                                return LocalRedirect($"~/Lawyer_Area/Lawyers/Index/{user.Id}");
 
                             case UserRole.Admin:
-                                return RedirectToAction("Index", "Home", new { area = "Admin_Area" });
+                                return LocalRedirect($"~/Admin_Area/AdminHome/Index/{user.Id}");
 
                             default:
                                 return LocalRedirect(returnUrl);

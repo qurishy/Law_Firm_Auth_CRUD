@@ -2,11 +2,6 @@
 using DataAccess.Repositories;
 using Law_Model.Models;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Law_Model.Static_file.Static_datas;
 
 namespace DATA.Repositories.Client_repo
@@ -21,37 +16,40 @@ namespace DATA.Repositories.Client_repo
             _db = db;
             _userManager=userManager;
         }
-        public async Task<ApplicationUser> CreateClientAsync(Client client, string password)
+        public async Task CreateClientAsync(ApplicationUser user, string address ="america", string PhoneNumber = "123456789" , DateTime dateTime = default)
         {
-            // Create the ApplicationUser first
-            var user = new ApplicationUser
-            {
-                UserName = client.User.Email,
-                Email = client.User.Email,
-                FirstName = client.User.FirstName,
-                LastName = client.User.LastName,
-                Role = UserRole.Client
-            };
+         
+           
 
-            var result = await _userManager.CreateAsync(user, password);
-
-            if (result.Succeeded)
+            if (user != null)
             {
                 // Add to Client role
                 await _userManager.AddToRoleAsync(user, UserRole.Client.ToString());
-
+                 var client = new Client();
                 // Create the Client record linked to this user
                 client.UserId = user.Id;
-                client.User = null; // Don't need to add the User again as it's already in the DB
+                client.Address = address;
+                client.PhoneNumber = PhoneNumber;
+                client.DateOfBirth = dateTime; // Set to current date for example
+                client.User = user; // Don't need to add the User again as it's already in the DB
 
-               await _db.Clients.AddAsync(client);
-                
+                await _db.Clients.AddAsync(client);
+                await _db.SaveChangesAsync();
+
             }
 
-            return user;
+            
         }
 
-        public async Task UpdateClient(Client client)
+     
+
+        public Task<Client> GetClientByCaseIdAsync(int caseId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public async Task UpdateClientAsync(Client client)
         {
             throw new NotImplementedException();
         }

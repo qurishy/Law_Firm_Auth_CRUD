@@ -1,12 +1,12 @@
 ﻿using Law_Firm_Web.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Law_Firm_Web.Areas.Client_Area.Controllers
 {
-   // [Area("Client_Area")]
-   // [Authorize(Policy = "ClientOnly")]
+    //[Area("Client_Area")]
+    // [Authorize(Policy = "ClientOnly")]
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

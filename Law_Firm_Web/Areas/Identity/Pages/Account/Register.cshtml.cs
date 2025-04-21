@@ -2,25 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using DATA.Repositories.Client_repo;
 using Law_Model.Models;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
 using static Law_Model.Static_file.Static_datas;
 
 namespace Law_Firm_Web.Areas.Identity.Pages.Account
@@ -34,8 +26,10 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IClient_Service _client_Service;
 
         public RegisterModel(
+            IClient_Service client_Service,
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
@@ -50,6 +44,7 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _webHostEnvironment = webHostEnvironment;
+            _client_Service = client_Service;
         }
 
         /// <summary>
@@ -92,12 +87,28 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
-            //[Required]
-            //[Display(Name = "Role")]
-            //public UserRole Role { get; set; }
+            
+            [StringLength(50)]
+            [Display(Name = "Address")]
+            public string Addresses { get; set; }
 
+
+            
+            [StringLength(50)]
+            [Display(Name = "Phone Number")]
+            public string phonwNumber { get; set; }
+
+            [Required]
+            [DataType(DataType.Date)]
+            [Display(Name = "Date Of Birth")]
+            public DateTime DateOfBirth { get; set; }
+
+            
+            
             [Display(Name = "Profile Picture")]
             public IFormFile ProfilePicture { get; set; }
+
+
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -169,7 +180,10 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
+                  await  _client_Service.CreateClientAsync(user,Input.Addresses , Input.phonwNumber,Input.DateOfBirth);
+
                     var userId = await _userManager.GetUserIdAsync((ApplicationUser)user);
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync((ApplicationUser)user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

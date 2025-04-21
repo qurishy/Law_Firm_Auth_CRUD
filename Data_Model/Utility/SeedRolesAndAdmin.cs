@@ -2,11 +2,6 @@
 using Law_Model.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Law_Model.Static_file.Static_datas;
 
 namespace Law_Model.Utility

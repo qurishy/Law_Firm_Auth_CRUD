@@ -1,3 +1,5 @@
+using DATA.Repositories.Client_repo;
+using DATA.Repositories.Lawyer_repo;
 using DataAccess.Data;
 using Law_Model.Models;
 using Law_Model.Utility;
@@ -10,10 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+
 builder.Services.AddDbContext<AplicationDB>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
+// Add Scoped Services
+builder.Services.AddScoped<IClient_Service, Client_Service>();
+builder.Services.AddScoped<ILawyer_Service  , Lawyer_Service>();
 
 
 
@@ -23,16 +30,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 10;
-    
-    
+
+
 })
 .AddEntityFrameworkStores<AplicationDB>()
 .AddDefaultTokenProviders().AddDefaultUI();
-
-
-
-
-
 
 
 
@@ -41,7 +43,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireRole(UserRole.Admin.ToString()));
-    options.AddPolicy("LawerlOnly", policy => policy.RequireRole(UserRole.Lawyer.ToString()));
+    options.AddPolicy("LawerOnly", policy => policy.RequireRole(UserRole.Lawyer.ToString()));
     options.AddPolicy("ClientOnly", policy => policy.RequireRole(UserRole.Client.ToString()));
 });
 
@@ -77,25 +79,20 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+      name: "areas",
+      pattern: "{area:exists}/{controller=Clients}/{action=Index}/{id?}");
+
+
+
 //app.MapControllerRoute(
 //    name: "default",
-//    pattern: "{area=Client_Area}/{controller=Home}/{action=Index}/{id?}")
+//    pattern: "{area=Client_Area}/{controller=Clients}/{action=Index}/{id?}")
 //    .WithStaticAssets();
-
-app.UseEndpoints(endpoints =>
-{
-  
-
-    endpoints.MapControllerRoute(
-        name: "areas",
-        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-});
-
-
 
 
 app.Run();
