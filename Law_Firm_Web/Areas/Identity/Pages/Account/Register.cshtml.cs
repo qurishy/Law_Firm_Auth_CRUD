@@ -3,6 +3,7 @@
 #nullable disable
 
 using DATA.Repositories.Client_repo;
+using DATA.Repositories.Lawyer_repo;
 using Law_Model.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -27,9 +28,11 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IClient_Service _client_Service;
+        private readonly ILawyer_Service _lawter_Service;
 
         public RegisterModel(
             IClient_Service client_Service,
+            ILawyer_Service lawter_Service,
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
@@ -45,6 +48,7 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             _webHostEnvironment = webHostEnvironment;
             _client_Service = client_Service;
+            _lawter_Service = lawter_Service;
         }
 
         /// <summary>
@@ -87,13 +91,13 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
-            
+
             [StringLength(50)]
             [Display(Name = "Address")]
             public string Addresses { get; set; }
 
 
-            
+
             [StringLength(50)]
             [Display(Name = "Phone Number")]
             public string phonwNumber { get; set; }
@@ -103,12 +107,25 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
             [Display(Name = "Date Of Birth")]
             public DateTime DateOfBirth { get; set; }
 
-            
-            
+
+
             [Display(Name = "Profile Picture")]
             public IFormFile ProfilePicture { get; set; }
 
 
+            [StringLength(50)]
+            [Display(Name = "Position")]
+            public string Position
+            {
+                get; set;
+            }
+
+            [StringLength(50)]
+            [Display(Name = "Department")]
+            public string Department
+            {
+                get; set;
+            }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -141,11 +158,26 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync((ApplicationUser)user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync((ApplicationUser)user, Input.Email, CancellationToken.None);
 
-                // Set additional user properties
-                user.FirstName = Input.FirstName;
-                user.LastName = Input.LastName;
-                user.Role = UserRole.Client;
-                user.Created = DateTime.UtcNow;
+                //checking if we are creating a lawyer or client
+                if (_signInManager.IsSignedIn(User))
+                {
+                    user.FirstName = Input.FirstName;
+                    user.LastName = Input.LastName;
+                    user.Role = UserRole.Lawyer;
+                    user.Created = DateTime.UtcNow;
+
+                }
+                else
+                {
+                    // Set additional user properties
+                    user.FirstName = Input.FirstName;
+                    user.LastName = Input.LastName;
+                    user.Role = UserRole.Client;
+                    user.Created = DateTime.UtcNow;
+
+                }
+
+
 
                 // Handle profile picture if uploaded
                 if (Input.ProfilePicture != null && Input.ProfilePicture.Length > 0)
@@ -165,10 +197,11 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                     // Save the file
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                     {
                         await Input.ProfilePicture.CopyToAsync(fileStream);
                     }
+
 
                     // Save the relative path to the user
                     user.ProfilePicture = "/profile-pictures/" + uniqueFileName;
@@ -180,7 +213,21 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                  await  _client_Service.CreateClientAsync(user,Input.Addresses , Input.phonwNumber,Input.DateOfBirth);
+                    if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        await _lawter_Service.CreatePersonnelAsync(user, Input.Position, Input.Department);
+
+
+                        return RedirectToAction("Index", "AdminHome", new { area = "Admin_Area" });
+
+                    }
+                    else
+                    {
+                        await _client_Service.CreateClientAsync(user, Input.Addresses, Input.phonwNumber, Input.DateOfBirth);
+
+                    }
+
+
 
                     var userId = await _userManager.GetUserIdAsync((ApplicationUser)user);
 

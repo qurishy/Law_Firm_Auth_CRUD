@@ -1,0 +1,74 @@
+﻿@using Law_Model.Static_file
+@model Law_Model.Models.LegalCase
+
+<form asp-action="CreateCase" method="post" enctype="multipart/form-data">
+    <fieldset>
+        <legend>Create a New Legal Case</legend>
+
+        <!-- Title -->
+        <div class="mb-3">
+            <label for="Title" class="form-label">Case Title</label>
+            <input type="text" class="form-control" id="Title" name="Title" value="@(Model?.Title ?? string.Empty)" required maxlength="100" placeholder="Enter case title">
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+            <label for="Description" class="form-label">Case Description</label>
+            <textarea class="form-control" id="Description" name="Description" rows="3" placeholder="Enter case description">@Model?.Description</textarea>
+        </div>
+
+        <!-- Case Type -->
+        <div class="mb-3">
+            <label for="Type" class="form-label">Case Type</label>
+            <select class="form-select" id="Type" name="Type">
+                @if (Model != null)
+                {
+                    @foreach (var type in Enum.GetValues(typeof(Law_Model.Static_file.Static_datas.CaseType)))
+                    {
+                        <option value="@type">@type</option>
+                    }
+                }
+                else
+                {
+                    <option disabled>No case types available</option>
+                }
+            </select>
+        </div>
+
+        <!-- Lawyer Selection -->
+  @*       <div class="mb-3">
+            <label for="lawyerId" class="form-label">Assign Lawyer</label>
+            <select class="form-select" id="lawyerId" name="lawyerId">
+                @if (Model != null)
+                {
+                    foreach (var lawyer in Model)
+                    {
+                        <option value="@lawyer.Id">@lawyer.Position</option>
+                    }
+                }
+                else
+                {
+                    <option disabled>No lawyers available</option>
+                }
+
+            </select>
+        </div>  *@
+
+        <!-- Case Status -->
+        <input type="hidden" id="Status" name="Status" value="New">
+
+        <!-- Open Date -->
+        <div class="mb-3">
+            <label for="OpenDate" class="form-label">Open Date</label>
+            <input type="date" class="form-control" disabled id="OpenDate" name="OpenDate" value="@(Model?.OpenDate.ToString("yyyy-MM-dd") ?? string.Empty)" required>
+        </div>
+
+        <!-- File Upload -->
+        <div class="mb-3">
+            <label for="Documents" class="form-label">Upload Documents</label>
+            <input class="form-control" type="file" id="Documents" name="uploadedDocuments" multiple>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </fieldset>
+</form>

@@ -4,10 +4,10 @@ using Law_Model.Models;
 
 namespace DATA.Repositories.Appointment_repo
 {
-    public class AppointmentService : Repository<Appointment>, IAppointment_Service
+    public class Appointment_Service : Repository<Appointment>, IAppointment_Service
     {
         private readonly AplicationDB _db;
-        public AppointmentService(AplicationDB db) : base(db)
+        public Appointment_Service(AplicationDB db) : base(db)
         {
             _db = db;
 

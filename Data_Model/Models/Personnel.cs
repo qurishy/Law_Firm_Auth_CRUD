@@ -15,12 +15,12 @@ namespace Law_Model.Models
         [Required]
         public string Position { get; set; } // e.g., "Lawyer", "Paralegal"
 
-        public string Department { get; set; }
+        public string? Department { get; set; }
 
         public DateTime HireDate { get; set; }
 
         // Navigation properties
-        public ICollection<LegalCase> AssignedCases { get; set; }
+        public ICollection<LegalCase> AssignedCases { get; set; } = new List<LegalCase>();
 
 
     }

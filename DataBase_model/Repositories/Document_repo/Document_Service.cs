@@ -1,14 +1,15 @@
 ﻿using DataAccess.Data;
 using DataAccess.Repositories;
 using Law_Model.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace DATA.Repositories.Document_repo
 {
-    public class DocumentService : Repository<Documented>, IDocument_Service
+    public class Document_Service : Repository<Documented>, IDocument_Service
     {
         private readonly AplicationDB _db;
 
-        public DocumentService(AplicationDB dB) : base(dB)
+        public Document_Service(AplicationDB dB) : base(dB)
         {
             _db = dB;
 
@@ -23,6 +24,50 @@ namespace DATA.Repositories.Document_repo
         public Task UpdateAsyc(Documented model)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task UploadDocsAsync(List<IFormFile> files, int caseId, string userId)
+        {
+
+            if (files == null || files.Count == 0)
+            {
+                throw new ArgumentException("No files provided for upload.");
+            }
+
+            var documentedList = new List<Documented>();
+
+            foreach (var file in files)
+            {
+                if (file.Length > 0)
+                {
+                    // Save the file to the file system
+                    var uploadsFolder = Path.Combine("wwwroot/uploads");
+                    Directory.CreateDirectory(uploadsFolder); // Ensure the directory exists
+                    var filePath = Path.Combine(uploadsFolder, file.FileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    // Create a Documented object
+                    var documented = new Documented
+                    {
+                        Title = file.FileName,
+                        FilePath = filePath,
+                        UploadDate = DateTime.UtcNow,
+                        UploadedById = userId,
+                        CaseId = caseId
+                    };
+
+                    documentedList.Add(documented);
+                }
+            }
+
+            // Add the documents to the database
+            await _db.Documents.AddRangeAsync(documentedList);
+            await _db.SaveChangesAsync();
+
         }
     }
 }

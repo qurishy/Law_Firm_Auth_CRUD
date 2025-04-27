@@ -15,33 +15,33 @@ namespace DataAccess.Repositories
             this.dbset=_context.Set<T>();
             //_context."your model another entity" = dbset;
         }
-        public void Add(T Entity)
+        public async Task Add(T Entity)
         {
-            dbset.Add(Entity);
+            dbset.AddAsync(Entity);
         }
 
-        public void Delete(T Entity)
+        public async Task Delete(T Entity)
         {
             dbset.Remove(Entity);
         }
 
-        public void DeleteRange(IEnumerable<T> entities)
+        public async Task DeleteRange(IEnumerable<T> entities)
         {
             dbset.RemoveRange(entities);
         }
 
-        public T Get(Expression<Func<T, bool>> filter)
+        public Task<T> Get(Expression<Func<T, bool>> filter)
         {
 
             IQueryable<T> entit = dbset;
 
             entit = entit.Where(filter);
 
-            return entit.FirstOrDefault();
+            return entit.FirstOrDefaultAsync();
 
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
             IQueryable<T> values = dbset;
 

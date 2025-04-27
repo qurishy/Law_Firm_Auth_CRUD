@@ -26,10 +26,13 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
+                // return RedirectToAction("Index", "Home");
+
                 return LocalRedirect(returnUrl);
             }
             else
             {
+
                 // This needs to be a redirect so that the browser performs a new
                 // request and the identity for the user gets updated.
                 return RedirectToPage();

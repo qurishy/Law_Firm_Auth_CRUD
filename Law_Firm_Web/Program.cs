@@ -1,5 +1,7 @@
 using DATA.Repositories.Client_repo;
+using DATA.Repositories.Document_repo;
 using DATA.Repositories.Lawyer_repo;
+using DATA.Repositories.LegalCase_repo;
 using DataAccess.Data;
 using Law_Model.Models;
 using Law_Model.Utility;
@@ -10,7 +12,7 @@ using static Law_Model.Static_file.Static_datas;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 
 
@@ -20,7 +22,10 @@ builder.Services.AddDbContext<AplicationDB>(options =>
 
 // Add Scoped Services
 builder.Services.AddScoped<IClient_Service, Client_Service>();
-builder.Services.AddScoped<ILawyer_Service  , Lawyer_Service>();
+builder.Services.AddScoped<ILawyer_Service, Lawyer_Service>();
+builder.Services.AddScoped<ILegalCase_Service, LegalCase_Service>(); // Add Scoped Services<ILegalCase_Service>
+builder.Services.AddScoped<IDocument_Service, Document_Service>(); // Add Scoped Services<ILawyer_Service>
+//builder.Services.AddScoped<IAppointment_Service, Appointment_Service>(); // Add Scoped Services<IClient_Service>
 
 
 
@@ -68,31 +73,21 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapRazorPages();
 
+// Area route should come first
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
+// Default route comes after
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-      name: "areas",
-      pattern: "{area:exists}/{controller=Clients}/{action=Index}/{id?}");
-
-
-
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{area=Client_Area}/{controller=Clients}/{action=Index}/{id?}")
-//    .WithStaticAssets();
-
 
 app.Run();

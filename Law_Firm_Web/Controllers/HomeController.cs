@@ -1,4 +1,6 @@
-﻿using Law_Firm_Web.Models;
+﻿using DATA.Repositories.Lawyer_repo;
+using Law_Firm_Web.Models;
+using Law_Model.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -10,16 +12,31 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ILawyer_Service _lawyer;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ILawyer_Service lawyer)
         {
             _logger = logger;
+            _lawyer = lawyer;
         }
 
         public IActionResult Index()
         {
             return View();
         }
+
+        public IActionResult Contacts()
+        {
+            return View();
+        }
+        public async Task<IActionResult> Attorneys()
+        {
+            IEnumerable<Personnel> lawyers = await _lawyer.GetAll();
+            ViewBag.Lawyers = lawyers;
+
+            return View();
+        }
+
 
         public IActionResult Privacy()
         {

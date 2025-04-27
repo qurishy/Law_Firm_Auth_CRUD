@@ -1,4 +1,10 @@
-﻿@page
+﻿
+@page
+
+@using Law_Model.Models
+@inject SignInManager<ApplicationUser> SignInManager
+
+
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -8,7 +14,14 @@
 <div class="row">
     <div class="col-md-8">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
-            <h2>Create a new account.</h2>
+            @if (SignInManager.IsSignedIn(User)&& User.IsInRole("Admin"))
+            {
+                <h2>Create a new Lawyer account.</h2>
+            }
+
+            else {    <h2>Create a new  account.</h2> }
+
+
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
@@ -35,27 +48,51 @@
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
 
-            <!-- New Address Field -->
+            @if(SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+                <!-- New Lawyer Field -->
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Position" class="form-control" placeholder="Position" />
+                    <label asp-for="Input.Position">Position</label>
+                    <span asp-validation-for="Input.Position" class="text-danger"></span>
+                </div>
+
+                <!-- New lawyer positon Field -->
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Department" class="form-control" placeholder="Department" />
+                    <label asp-for="Input.Department">Department</label>
+                    <span asp-validation-for="Input.Department" class="text-danger"></span>
+                </div>
+
+            }
+            else
+            {
+                    <!-- New Address Field -->
             <div class="form-floating mb-3">
                 <input asp-for="Input.Addresses" class="form-control" placeholder="Address" />
                 <label asp-for="Input.Addresses">Address</label>
                 <span asp-validation-for="Input.Addresses" class="text-danger"></span>
-            </div>
+                </div>
+            
+                <!-- New Phone Number Field -->
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.phonwNumber" class="form-control" placeholder="Phone Number" />
+                    <label asp-for="Input.phonwNumber">Phone Number</label>
+                    <span asp-validation-for="Input.phonwNumber" class="text-danger"></span>
+                </div>
 
-            <!-- New Phone Number Field -->
-            <div class="form-floating mb-3">
-                <input asp-for="Input.phonwNumber" class="form-control" placeholder="Phone Number" />
-                <label asp-for="Input.phonwNumber">Phone Number</label>
-                <span asp-validation-for="Input.phonwNumber" class="text-danger"></span>
-            </div>
+                <!-- New City Field -->
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.DateOfBirth" class="form-control" type="date" />
+                    <label asp-for="Input.DateOfBirth">City</label>
+                    <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+                </div>
 
-            <!-- New City Field -->
-            <div class="form-floating mb-3">
-                <input asp-for="Input.DateOfBirth" class="form-control" type="date" />
-                <label asp-for="Input.DateOfBirth">City</label>
-                <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
-            </div>
 
+
+            }
+
+        
             <div class="mb-3">
                 <label asp-for="Input.ProfilePicture" class="form-label">Profile Picture</label>
                 <input type="file" asp-for="Input.ProfilePicture" class="form-control" accept="image/*" />

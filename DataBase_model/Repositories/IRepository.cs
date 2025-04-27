@@ -6,14 +6,14 @@ namespace DataAccess.Repositories
     public interface IRepository<T> where T : class
     {
         //T---> is Model in here 
-        IEnumerable<T> GetAll();
+        Task<IEnumerable<T>> GetAll();
 
-        T Get(Expression<Func<T, bool>> filter);
-        void Add(T Entity);
+        Task<T> Get(Expression<Func<T, bool>> filter);
+        Task Add(T Entity);
 
-        void Delete(T Entity);
+        Task Delete(T Entity);
 
-        void DeleteRange(IEnumerable<T> entities);
+        Task DeleteRange(IEnumerable<T> entities);
 
 
     }

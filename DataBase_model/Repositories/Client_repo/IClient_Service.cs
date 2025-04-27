@@ -7,7 +7,9 @@ namespace DATA.Repositories.Client_repo
     {
         Task CreateClientAsync(ApplicationUser user, string address, string PhoneNumber, DateTime dateTime);
 
-        Task <Client> GetClientByCaseIdAsync(int caseId);
+        Task<Client> GetClientByCaseIdAsync(int caseId);
+
+        Task<Client> GetClientUserByIdAsync(string userId);
 
         Task UpdateClientAsync(Client client);
 
