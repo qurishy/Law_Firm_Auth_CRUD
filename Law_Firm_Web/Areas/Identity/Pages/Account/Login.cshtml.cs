@@ -129,13 +129,13 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
                         switch (user.Role)
                         {
                             case UserRole.Client:
-                                return LocalRedirect($"~/Client_Area/Clients/Index/{user.Id}");
+                                return LocalRedirect($"~/Client_Area/Clients/Index/");
 
                             case UserRole.Lawyer:
-                                return LocalRedirect($"~/Lawyer_Area/Lawyers/Index/{user.Id}");
+                                return LocalRedirect($"~/Lawyer_Area/LawyersHome/Index/");
 
                             case UserRole.Admin:
-                                return LocalRedirect($"~/Admin_Area/AdminHome/Index/{user.Id}");
+                                return LocalRedirect($"~/Admin_Area/AdminHome/Index/");
 
                             default:
                                 return LocalRedirect(returnUrl);

@@ -24,8 +24,8 @@ namespace DATA.Repositories.Lawyer_repo
         {
             if (user != null)
             {
-                // Add to Client role
-                await _userManager.AddToRoleAsync(user, UserRole.Lawyer.ToString());
+                
+                
                 Personnel lawyer = new Personnel();
                 // Create the Client record linked to this user
                 lawyer.UserId = user.Id;

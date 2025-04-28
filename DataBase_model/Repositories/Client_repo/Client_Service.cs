@@ -25,7 +25,7 @@ namespace DATA.Repositories.Client_repo
             if (user != null)
             {
                 // Add to Client role
-                await _userManager.AddToRoleAsync(user, UserRole.Client.ToString());
+               // await _userManager.AddToRoleAsync(user, UserRole.Client.ToString());
                 var client = new Client();
                 // Create the Client record linked to this user
                 client.UserId = user.Id;
@@ -72,17 +72,25 @@ namespace DATA.Repositories.Client_repo
                 throw new ArgumentException("User ID cannot be null or empty", nameof(userId));
             }
 
+           
+
             try
             {
                 return await _db.Clients
-                    .Include(c => c.User)
-                    .FirstOrDefaultAsync(c => c.UserId == userId);
+                    .Include(p => p.User) // Include related ApplicationUser
+                    .Include(p => p.Cases)
+                    .FirstOrDefaultAsync(p => p.UserId == userId);
             }
             catch (Exception ex)
             {
-                // Consider logging the exception here
-                throw; // Re-throw without losing stack trace
+
+                throw;
             }
+        }
+
+        public async Task SaveAsync()
+        {
+            await _db.SaveChangesAsync();
         }
 
         public async Task UpdateClientAsync(Client client)

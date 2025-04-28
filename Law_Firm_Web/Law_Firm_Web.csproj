@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Lawyer_Area\Controllers\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

@@ -1,5 +1,32 @@
-﻿@{
+﻿@* @{
     if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
+    {
+        Layout = parentLayout.ToString();
+    }
+    else
+    {
+        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    }
+} *@  
+
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    var user = UserManager.GetUserAsync(User).Result;
+    if (user != null && UserManager.IsInRoleAsync(user, "Client").Result)
+    {
+        Layout = "/Areas/Client_Area/Views/Shared/_Layout.cshtml"; // Path to the client-specific layout
+    }
+    else if (user != null && UserManager.IsInRoleAsync(user, "Lawyer").Result)
+    {
+        Layout = "/Areas/Lawyer_Area/Views/Shared/_Layout.cshtml"; // Path to the client-specific layout
+    }
+    else if (user != null && UserManager.IsInRoleAsync(user, "Admin").Result)
+    {
+        Layout = "/Areas/Admin_Area/Views/Shared/_Layout.cshtml";
+    }
+    else if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
     {
         Layout = parentLayout.ToString();
     }

@@ -49,42 +49,47 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
                 return Unauthorized();
             }
 
-            // Get all cases for the user
-            IEnumerable<LegalCase> cases = await _caseService.GetAll(); // Note plural method name
+            var clien = await _clientService.GetClientUserByIdAsync(userId);
 
-            if (cases == null)
+            if (clien == null)
             {
-                ModelState.AddModelError("", "No cases found for this user.");
-                cases =  Enumerable.Empty<LegalCase>();
-                return View(cases); // Return empty case
+                return NotFound();
             }
 
-            // Return first case if you want to show just one
-            return View(cases);
+            var assignedCases = clien.Cases.ToList();
+
+         
+
+            return View(assignedCases);
         }
 
 
 
 
 
-
-        // Function to create a new case by choosing a lawyer
         [HttpGet]
         public async Task<IActionResult> CreateCase()
         {
-            // Fetch all lawyers and pass them to the view using ViewBag
-            var lawyers = await _lawyerService.GetAll();
+            try
+            {
+                var model = new LegalCase();
+                var lawyers = await _lawyerService.GetAll();
 
+                // Ensure lawyers is not null before passing to view
+                ViewBag.Lawyers = lawyers.ToList() ?? new List<Personnel>();
 
-            var Lawyers = lawyers;
-
-            return View();
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                // Log error
+              
+                return View(new LegalCase());
+            }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> CreateCase(LegalCase model, int lawyerId, List<IFormFile> uploadedDocuments)
-
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -93,14 +98,14 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
                 return Unauthorized();
             }
 
-
-            if (ModelState.IsValid)
-            {
-                // Create a new LegalCase object
+            var client = await _clientService.GetClientUserByIdAsync(userId);
+            
+                // Create new case
                 LegalCase newCase = new LegalCase
                 {
-                    ClientId = int.Parse(userId),
-                    AssignedLawyerId =lawyerId,
+                    ClientId = client.Id,
+                    Client = client,
+                    AssignedLawyerId = lawyerId,
                     Title = model.Title,
                     Description = model.Description,
                     Status = Static_datas.CaseStatus.New,
@@ -108,24 +113,21 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
                     Type = model.Type
                 };
 
-                // Add the new case to the database
                 await _caseService.Add(newCase);
                 await _caseService.SaveAsyc();
 
-                // Process uploaded documents using the UploadDocsAsync method
                 if (uploadedDocuments != null && uploadedDocuments.Count > 0)
                 {
                     await _caseService.UploadDocsAsync(uploadedDocuments, newCase.Id, userId);
                 }
 
-                // Redirect to MyCases action
-
                 return RedirectToAction("MyCases");
-            }
+            
 
-            ModelState.AddModelError("", "Failed to create the case. Please try again.");
+            // If we got this far, something failed - repopulate lawyers
             var lawyers = await _lawyerService.GetAll();
-            return View(lawyers); ;
+            ViewBag.Lawyers = lawyers;
+            return View(model);
         }
 
 

@@ -207,6 +207,9 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
                     user.ProfilePicture = "/profile-pictures/" + uniqueFileName;
                 }
 
+
+
+
                 var result = await _userManager.CreateAsync((ApplicationUser)user, Input.Password);
 
                 if (result.Succeeded)
@@ -215,21 +218,29 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
 
                     if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
+                        await _userManager.AddToRoleAsync(user, UserRole.Lawyer.ToString());
+
                         await _lawter_Service.CreatePersonnelAsync(user, Input.Position, Input.Department);
 
-
-                        return RedirectToAction("Index", "AdminHome", new { area = "Admin_Area" });
+                       await _lawter_Service.Save();
+                   
 
                     }
                     else
                     {
+                        await _userManager.AddToRoleAsync(user, UserRole.Client.ToString());
+
                         await _client_Service.CreateClientAsync(user, Input.Addresses, Input.phonwNumber, Input.DateOfBirth);
+
+                        await _client_Service.SaveAsync(); 
+                        
+                 
 
                     }
 
 
 
-                    var userId = await _userManager.GetUserIdAsync((ApplicationUser)user);
+                     var userId = await _userManager.GetUserIdAsync((ApplicationUser)user);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync((ApplicationUser)user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -242,9 +253,14 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
+
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                    }
+                    else if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("Index", "AdminHome", new { area = "Admin_Area" });
                     }
                     else
                     {

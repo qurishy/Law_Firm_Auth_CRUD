@@ -1,5 +1,5 @@
 ﻿@using Law_Model.Static_file
-@model Law_Model.Models.LegalCase
+@model LegalCase
 
 <form asp-action="CreateCase" method="post" enctype="multipart/form-data">
     <fieldset>
@@ -7,61 +7,55 @@
 
         <!-- Title -->
         <div class="mb-3">
-            <label for="Title" class="form-label">Case Title</label>
-            <input type="text" class="form-control" id="Title" name="Title" value="@(Model?.Title ?? string.Empty)" required maxlength="100" placeholder="Enter case title">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" required maxlength="100" placeholder="Enter case title">
+            <span asp-validation-for="Title" class="text-danger"></span>
         </div>
 
         <!-- Description -->
         <div class="mb-3">
-            <label for="Description" class="form-label">Case Description</label>
-            <textarea class="form-control" id="Description" name="Description" rows="3" placeholder="Enter case description">@Model?.Description</textarea>
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Enter case description"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
         <!-- Case Type -->
         <div class="mb-3">
-            <label for="Type" class="form-label">Case Type</label>
-            <select class="form-select" id="Type" name="Type">
-                @if (Model != null)
-                {
-                    @foreach (var type in Enum.GetValues(typeof(Law_Model.Static_file.Static_datas.CaseType)))
-                    {
-                        <option value="@type">@type</option>
-                    }
-                }
-                else
-                {
-                    <option disabled>No case types available</option>
-                }
+            <label asp-for="Type" class="form-label"></label>
+            <select asp-for="Type" class="form-select" asp-items="Html.GetEnumSelectList<Static_datas.CaseType>()">
+                <option value="">-- Select Case Type --</option>
             </select>
+            <span asp-validation-for="Type" class="text-danger"></span>
         </div>
 
         <!-- Lawyer Selection -->
-  @*       <div class="mb-3">
+        <div class="mb-3">
             <label for="lawyerId" class="form-label">Assign Lawyer</label>
-            <select class="form-select" id="lawyerId" name="lawyerId">
-                @if (Model != null)
+            <select class="form-select" id="lawyerId" name="lawyerId" required>
+                <option value="">-- Select Lawyer --</option>
+                @if (ViewBag.Lawyers is List<Personnel> lawyers && lawyers.Any())
                 {
-                    foreach (var lawyer in Model)
+                    foreach (var lawyer in lawyers)
                     {
-                        <option value="@lawyer.Id">@lawyer.Position</option>
+                        if (lawyer != null)
+                        {
+                            <option value="@lawyer.Id">(@lawyer.Position)</option>
+                        }
                     }
                 }
                 else
                 {
-                    <option disabled>No lawyers available</option>
+                    <option value="">No lawyers available</option>
                 }
-
             </select>
-        </div>  *@
-
-        <!-- Case Status -->
-        <input type="hidden" id="Status" name="Status" value="New">
-
-        <!-- Open Date -->
-        <div class="mb-3">
-            <label for="OpenDate" class="form-label">Open Date</label>
-            <input type="date" class="form-control" disabled id="OpenDate" name="OpenDate" value="@(Model?.OpenDate.ToString("yyyy-MM-dd") ?? string.Empty)" required>
+            @if (ViewBag.Lawyers == null || (ViewBag.Lawyers as List<Personnel>)?.Count == 0)
+            {
+                <span class="text-danger">No lawyers available</span>
+            }
         </div>
+
+        <!-- Hidden Status Field -->
+        <input type="hidden" asp-for="Status" value="@Static_datas.CaseStatus.New">
 
         <!-- File Upload -->
         <div class="mb-3">
@@ -72,3 +66,7 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </fieldset>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -91,7 +91,7 @@ namespace DATA.Repositories.LegalCase_repo
                     var documented = new Documented
                     {
                         Title = file.FileName,
-
+                        Description = filePath,
                         FilePath = filePath,
                         UploadDate = DateTime.UtcNow,
                         UploadedById = userId,

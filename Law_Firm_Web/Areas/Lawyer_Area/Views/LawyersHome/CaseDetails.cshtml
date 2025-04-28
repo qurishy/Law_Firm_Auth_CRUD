@@ -1,0 +1,29 @@
+﻿@model LegalCase
+
+<h2>Case Details</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Title</h5>
+        <p class="card-text"><strong>Description:</strong> @Model.Description</p>
+        <p class="card-text"><strong>Type:</strong> @Model.Type</p>
+        <p class="card-text"><strong>Status:</strong> @Model.Status</p>
+        <p class="card-text"><strong>Open Date:</strong> @Model.OpenDate.ToShortDateString()</p>
+        @if (Model.CloseDate.HasValue)
+        {
+            <p class="card-text"><strong>Close Date:</strong> @Model.CloseDate.Value.ToShortDateString()</p>
+        }
+    </div>
+</div>
+
+<h3>Upload Documents</h3>
+
+<form asp-action="AddDocumentAndChangeStatus" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="caseId" value="@Model.Id" />
+    <div class="mb-3">
+        <label for="files" class="form-label">Select Files</label>
+        <input type="file" name="files" id="files" class="form-control" multiple />
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+
