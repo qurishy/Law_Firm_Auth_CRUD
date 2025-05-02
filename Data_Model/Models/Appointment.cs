@@ -10,7 +10,10 @@ namespace Law_Model.Models
         public DateTime ScheduledTime { get; set; }
         public string Notes { get; set; }
 
+        public bool? IsCompleted { get; set; }
+
         public int CaseId { get; set; }
         public LegalCase Case { get; set; }
+
     }
 }

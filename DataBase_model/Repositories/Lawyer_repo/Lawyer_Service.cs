@@ -3,7 +3,6 @@ using DataAccess.Repositories;
 using Law_Model.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using static Law_Model.Static_file.Static_datas;
 
 namespace DATA.Repositories.Lawyer_repo
 {
@@ -24,8 +23,8 @@ namespace DATA.Repositories.Lawyer_repo
         {
             if (user != null)
             {
-                
-                
+
+
                 Personnel lawyer = new Personnel();
                 // Create the Client record linked to this user
                 lawyer.UserId = user.Id;
@@ -43,7 +42,7 @@ namespace DATA.Repositories.Lawyer_repo
 
         }
 
-
+        //we are getting a specific personnel by using application user id 
         public async Task<Personnel?> GetPersonnelUserByIdAsync(string userId)
         {
             if (string.IsNullOrWhiteSpace(userId))
@@ -55,6 +54,7 @@ namespace DATA.Repositories.Lawyer_repo
             {
                 return await _db.Personnel
                     .Include(p => p.User) // Include related ApplicationUser
+                    .Include(c => c.AssignedCases)
 
                     .FirstOrDefaultAsync(p => p.UserId == userId);
             }
@@ -65,7 +65,7 @@ namespace DATA.Repositories.Lawyer_repo
             }
         }
 
-
+        //we are getting a specific personnel by using case id and the case details
         public async Task<Personnel?> GetPersonnelByCaseIdAsync(int caseId)
         {
             try
@@ -86,6 +86,8 @@ namespace DATA.Repositories.Lawyer_repo
             }
         }
 
+
+        //we are updating a specific personnel
         public async Task UpdatePersonnel(Personnel personnel)
         {
             if (personnel == null)
@@ -105,10 +107,6 @@ namespace DATA.Repositories.Lawyer_repo
 
         }
 
-        public async Task Save()
-        {
-            await _db.SaveChangesAsync();
-        }
 
 
     }

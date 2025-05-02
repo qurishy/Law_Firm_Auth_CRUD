@@ -74,12 +74,7 @@
                 <span asp-validation-for="Input.Addresses" class="text-danger"></span>
                 </div>
             
-                <!-- New Phone Number Field -->
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.phonwNumber" class="form-control" placeholder="Phone Number" />
-                    <label asp-for="Input.phonwNumber">Phone Number</label>
-                    <span asp-validation-for="Input.phonwNumber" class="text-danger"></span>
-                </div>
+            
 
                 <!-- New City Field -->
                 <div class="form-floating mb-3">
@@ -90,7 +85,15 @@
 
 
 
-            }
+            }  
+            
+            
+            <!-- New Phone Number Field -->
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.phonwNumber" class="form-control" placeholder="Phone Number" />
+                    <label asp-for="Input.phonwNumber">Phone Number</label>
+                    <span asp-validation-for="Input.phonwNumber" class="text-danger"></span>
+                </div>
 
         
             <div class="mb-3">

@@ -17,7 +17,7 @@ namespace DataAccess.Repositories
         }
         public async Task Add(T Entity)
         {
-            dbset.AddAsync(Entity);
+            await dbset.AddAsync(Entity);
         }
 
         public async Task Delete(T Entity)
@@ -28,6 +28,8 @@ namespace DataAccess.Repositories
         public async Task DeleteRange(IEnumerable<T> entities)
         {
             dbset.RemoveRange(entities);
+
+
         }
 
         public Task<T> Get(Expression<Func<T, bool>> filter)

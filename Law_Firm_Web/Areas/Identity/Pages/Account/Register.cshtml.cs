@@ -165,6 +165,7 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
                     user.LastName = Input.LastName;
                     user.Role = UserRole.Lawyer;
                     user.Created = DateTime.UtcNow;
+                    user.PhoneNumber = Input.phonwNumber;
 
                 }
                 else
@@ -174,6 +175,7 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
                     user.LastName = Input.LastName;
                     user.Role = UserRole.Client;
                     user.Created = DateTime.UtcNow;
+                    user.PhoneNumber = Input.phonwNumber;
 
                 }
 
@@ -222,8 +224,8 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
 
                         await _lawter_Service.CreatePersonnelAsync(user, Input.Position, Input.Department);
 
-                       await _lawter_Service.Save();
-                   
+
+
 
                     }
                     else
@@ -232,15 +234,15 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account
 
                         await _client_Service.CreateClientAsync(user, Input.Addresses, Input.phonwNumber, Input.DateOfBirth);
 
-                        await _client_Service.SaveAsync(); 
-                        
-                 
+
+
+
 
                     }
 
 
 
-                     var userId = await _userManager.GetUserIdAsync((ApplicationUser)user);
+                    var userId = await _userManager.GetUserIdAsync((ApplicationUser)user);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync((ApplicationUser)user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

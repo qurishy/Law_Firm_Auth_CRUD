@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Appointment>
+
+<table class="table table-hover">
+    <thead>
+        <tr class="table-dark">
+            <th scope="col">Title</th>
+            <th scope="col">Scheduled Time</th>
+            <th scope="col">Notes</th>
+            <th scope="col">Case Title</th>
+            <th scope="col">Cancel</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var appointment in Model)
+            {
+               
+                    <tr class="table-info">
+
+
+                    <td><span class="badge bg-info"> @appointment.Title   </span> </td>
+                    <td>@appointment.ScheduledTime.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@appointment.Notes</td>
+                    <td>@appointment.Case.Title</td>
+                    @if (appointment.ScheduledTime >= DateTime.Now)
+        {
+                    <td> <a type="button" class="btn btn-outline-danger" asp-area="Client_Area" asp-controller="Clients" asp-action="DeleteAppointment" asp-route-Id="@appointment.Id">Cancel</a> </td>
+        }
+                    else
+                    {
+                        <td> <a type="button" class="btn btn-outline-warning" asp-area="Client_Area" asp-controller="Clients" asp-action="MyCases">New Appointment</a> </td>
+                    }
+                </tr>
+
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">No appointments found.</td>
+            </tr>
+        }
+    </tbody>
+</table>

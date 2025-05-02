@@ -1,0 +1,192 @@
+﻿@model ModelView
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+<style>
+    .profile-sidebar {
+        background: linear-gradient(135deg, #4158D0 0%, #C850C0 100%);
+    }
+
+    .nav-pills .nav-link {
+        color: #6c757d;
+        border-radius: 10px;
+        padding: 12px 20px;
+        margin: 4px 0;
+        transition: all 0.3s ease;
+    }
+
+        .nav-pills .nav-link:hover {
+            background-color: #f8f9fa;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: #fff;
+            color: #4158D0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .profile-header {
+        background: linear-gradient(135deg, #4158D0 0%, #C850C0 100%);
+        height: 150px;
+        border-radius: 15px;
+    }
+
+    .profile-pic {
+        width: 120px;
+        height: 120px;
+        border: 4px solid #fff;
+        margin-top: -60px;
+        background-color: #fff;
+    }
+
+    .settings-card {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+        .settings-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+    .form-switch .form-check-input {
+        width: 3em;
+        height: 1.5em;
+        margin-left: -3.5em;
+    }
+
+    .activity-item {
+        border-left: 2px solid #e9ecef;
+        padding-left: 20px;
+        position: relative;
+    }
+
+        .activity-item::before {
+            content: '';
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4158D0;
+            position: absolute;
+            left: -7px;
+            top: 5px;
+        }
+</style>
+
+<div class="bg-light">
+    <div class="container py-5">
+        <div class="row">
+            <!-- Profile Header -->
+            <div class="col-12 mb-4">
+
+                <div class="text-center">
+                    <h1 class="display-4 fw-bold"> History of Appointments and Cases</h1>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-0">
+                            <div class="row g-0">
+                                <!-- Sidebar -->
+                                <div class="col-lg-3 border-end">
+                                    <div class="p-4">
+                                        <div class="nav flex-column nav-pills">
+                                            <a class="nav-link " asp-area="Lawyer_Area" asp-controller="LawyersHome" asp-action="Index">
+                                                <i class="fas fa-user me-2"></i>Personal Info
+                                            </a>
+                                            <a class="nav-link" asp-area="Lawyer_Area" asp-controller="LawyersHome" asp-action="AssignedCases"><i class="fas fa-lock me-2"></i>Cases</a>
+                                            <a class="nav-link" asp-area="Lawyer_Area" asp-controller="LawyersHome" asp-action="Appointments"><i class="fas fa-bell me-2"></i>Appointment</a>
+                                            <a class="nav-link active" asp-area="Lawyer_Area" asp-controller="LawyersHome" asp-action="HistoryOfAppointments"><i class="fas fa-chart-line me-2"></i>History</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="border-end col-lg-9">
+                               
+
+                                <!-- Legal Cases Table -->
+                                <h3>Legal Cases</h3>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Case Title</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Open Date</th>
+                                            <th scope="col">Close Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.LegalCase != null && Model.LegalCase.Any())
+                                        {
+                                            foreach (var legalCase in Model.LegalCase)
+                                            {
+                                                <tr class="table-primary">
+                                                    <th scope="row">@legalCase.Title</th>
+                                                    <td>@legalCase.Description</td>
+                                                    <td>@legalCase.Status</td>
+                                                    <td>@(legalCase.OpenDate.ToString("yyyy-MM-dd"))</td>
+                                                    <td>@(legalCase.CloseDate.HasValue? legalCase.CloseDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="4" class="text-center">No legal cases found.</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                                <!-- Appointments Table -->
+                                <h3>Appointments</h3>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Appointment Title</th>
+                                            <th scope="col">Scheduled Time</th>
+                                            <th scope="col">Notes</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.Appointment != null && Model.Appointment.Any())
+                                        {
+                                            foreach (var appointment in Model.Appointment)
+                                            {
+                                                <tr class="table-success">
+                                                    <th scope="row">@appointment.Title</th>
+                                                    <td>@appointment.ScheduledTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                                    <td>@appointment.Notes</td>
+                                                    <td>@(appointment.IsCompleted == true ? "Completed" : "Pending")</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="4" class="text-center">No appointments found.</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+
+                              
+                            </div>
+
+                           
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

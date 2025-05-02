@@ -1,0 +1,52 @@
+﻿@model Appointment
+
+<div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+    <div class="card-header">Header</div>
+    <div class="card-body">
+        <form method="post" asp-action="CreateAppointment" asp-controller="Clients">
+            <fieldset>
+
+                <!-- Hidden input to ensure CaseId is submitted -->
+                <input type="hidden"  name="caseId" value="@ViewBag.CaseId" />
+             
+
+
+                <div class="form-group">
+                    <label class="form-label mt-4" for="titleInput">Title</label>
+                    <input class="form-control"
+                           id="titleInput"
+                           type="text"
+                           name="Title"
+                           value="@Model?.Title"
+                           placeholder="Enter title..."
+                           @(Model != null && !string.IsNullOrEmpty(Model.Title) ? "disabled" : "") />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label mt-4" for="scheduledTimeInput">Scheduled Time</label>
+                    <input class="form-control"
+                           id="scheduledTimeInput"
+                           type="datetime-local"
+                           
+                           name="ScheduledTime"
+                           value="@(Model?.ScheduledTime.ToString("yyyy-MM-ddTHH:mm"))"
+                           @(Model != null && Model.ScheduledTime != default(DateTime) ? "disabled" : "") />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label mt-4" for="notesInput">Notes</label>
+                    <textarea class="form-control"
+                              id="notesInput"
+                              name="Notes"
+                              placeholder="Enter notes..."
+                              @(Model != null && !string.IsNullOrEmpty(Model.Notes) ? "disabled" : "")>@Model?.Notes</textarea>
+                </div>
+
+       
+
+                <button type="submit" class="btn btn-outline-success">Submit</button>
+                <a type="button" class="btn btn-outline-danger" asp-area="Client_Area" asp-controller="Clients" asp-action="Index">Back</a>
+            </fieldset>
+        </form>
+    </div>
+</div>

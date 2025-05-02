@@ -3,7 +3,6 @@ using DataAccess.Repositories;
 using Law_Model.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using static Law_Model.Static_file.Static_datas;
 
 namespace DATA.Repositories.Client_repo
 {
@@ -17,6 +16,9 @@ namespace DATA.Repositories.Client_repo
             _db = db;
             _userManager=userManager;
         }
+
+
+        //we are creating a client and adding it to the database getting the user from the registration page
         public async Task CreateClientAsync(ApplicationUser user, string address = "america", string PhoneNumber = "123456789", DateTime dateTime = default)
         {
 
@@ -25,7 +27,7 @@ namespace DATA.Repositories.Client_repo
             if (user != null)
             {
                 // Add to Client role
-               // await _userManager.AddToRoleAsync(user, UserRole.Client.ToString());
+                // await _userManager.AddToRoleAsync(user, UserRole.Client.ToString());
                 var client = new Client();
                 // Create the Client record linked to this user
                 client.UserId = user.Id;
@@ -44,7 +46,7 @@ namespace DATA.Repositories.Client_repo
         }
 
 
-
+        //we are getting the client from the database with the case id and case details
         public async Task<Client> GetClientByCaseIdAsync(int caseId)
         {
             try
@@ -65,6 +67,8 @@ namespace DATA.Repositories.Client_repo
             }
         }
 
+
+        //we are getting the client from the database with the user id and user details
         public async Task<Client> GetClientUserByIdAsync(string userId)
         {
             if (string.IsNullOrWhiteSpace(userId))
@@ -72,7 +76,7 @@ namespace DATA.Repositories.Client_repo
                 throw new ArgumentException("User ID cannot be null or empty", nameof(userId));
             }
 
-           
+
 
             try
             {
@@ -88,14 +92,29 @@ namespace DATA.Repositories.Client_repo
             }
         }
 
-        public async Task SaveAsync()
-        {
-            await _db.SaveChangesAsync();
-        }
-
+        //we are updating the client in the database with the new cleient model
         public async Task UpdateClientAsync(Client client)
         {
-            throw new NotImplementedException();
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client), "Client cannot be null");
+            }
+
+            var existingClient = await _db.Clients.FirstOrDefaultAsync(c => c.Id == client.Id);
+
+            if (existingClient == null)
+            {
+                throw new InvalidOperationException($"Client with ID {client.Id} does not exist");
+            }
+
+            // Update properties
+            existingClient.Address = client.Address;
+            existingClient.PhoneNumber = client.PhoneNumber;
+            existingClient.DateOfBirth = client.DateOfBirth;
+
+            // Save changes to the database
+            _db.Clients.Update(existingClient);
+            await _db.SaveChangesAsync();
         }
     }
 }

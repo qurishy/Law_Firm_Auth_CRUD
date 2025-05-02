@@ -1,0 +1,35 @@
+﻿@{
+    var personnelWithCaseCounts = ViewData["PersonnelWithCaseCounts"] as IEnumerable<dynamic>;
+}
+
+<h1>All Personnel</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Department</th>
+            <th>Hire Date</th>
+            <th>Phone Number</th>
+            <th>Assigned Case Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (personnelWithCaseCounts != null)
+        {
+            foreach (var item in personnelWithCaseCounts)
+            {
+                <tr>
+                    <td>@item.Personnel.User.FirstName @item.Personnel.User.LastName</td>
+                    <td>@item.Personnel.Position</td>
+                    <td>@item.Personnel.Department</td>
+
+                    <td>@item.Personnel.HireDate</td>
+                    <td>@(item?.Personnel.User.PhoneNumber?? item.Personnel.User.PhoneNumber ?? "N/A")</td>
+                    <td>@(item?.AssignedCaseCount ?? 0)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

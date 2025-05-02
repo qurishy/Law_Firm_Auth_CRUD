@@ -1,0 +1,33 @@
+﻿@model IEnumerable<LegalCase>
+
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Case Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Type</th>
+            <th scope="col">Status</th>
+            <th scope="col">Client Name</th>
+            <th scope="col">Assigned Lawyer</th>
+            <th scope="col">Open Date</th>
+            <th scope="col">Close Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var legalCase in Model)
+        {
+            <tr class="@(legalCase.Status == Law_Model.Static_file.Static_datas.CaseStatus.Closed ? "table-success" : "table-warning")">
+                <td>@legalCase.Title</td>
+                <td>@legalCase.Description</td>
+                <td>@legalCase.Type</td>
+                <td>@legalCase.Status</td>
+                <td>@($"{legalCase.Client.User.FirstName} {legalCase.Client.User.LastName}")</td>
+                <td>@(legalCase.AssignedLawyer != null ? $"{legalCase.AssignedLawyer.User.FirstName} {legalCase.AssignedLawyer.User.LastName}" : "Unassigned")</td>
+                <td>@legalCase.OpenDate.ToString("yyyy-MM-dd")</td>
+                <td>@(legalCase.CloseDate.HasValue? legalCase.CloseDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
+            </tr>
+        }
+    </tbody>
+</table>

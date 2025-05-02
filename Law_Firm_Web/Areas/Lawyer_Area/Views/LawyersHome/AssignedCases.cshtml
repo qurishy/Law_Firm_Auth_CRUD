@@ -97,8 +97,8 @@
                                                 <i class="fas fa-user me-2"></i>Personal Info
                                             </a>
                                             <a class="nav-link active" asp-area="Lawyer_Area" asp-controller="LawyersHome" asp-action="AssignedCases"><i class="fas fa-lock me-2"></i>Cases</a>
-                                            <a class="nav-link" asp-area="Lawyer_Area" asp-controller="LawyersHome" asp-action="Index"><i class="fas fa-bell me-2"></i>Notifications</a>
-                                            <a class="nav-link" asp-area="Lawyer_Area" asp-controller="LawyersHome" asp-action="AssignedCases"><i class="fas fa-chart-line me-2"></i>Activity</a>
+                                            <a class="nav-link" asp-area="Lawyer_Area" asp-controller="LawyersHome" asp-action="Appointments"><i class="fas fa-bell me-2"></i>Appointment</a>
+                                            <a class="nav-link" asp-area="Lawyer_Area" asp-controller="LawyersHome" asp-action="HistoryOfAppointments"><i class="fas fa-chart-line me-2"></i>History</a>
                                         </div>
                                     </div>
                                 </div>
@@ -111,22 +111,47 @@
                                         {
                                             <!-- Experience Card -->
                                             <div class="card shadow border-0 rounded-4 mb-5">
+                                              <span class="badge rounded-pill bg-warning">@legalCase.Title</span>
                                                 <div class="card-body p-5">
-                                                    <div class="row align-items-center gx-5">
-                                                        <div class="col text-center text-lg-start mb-4 mb-lg-0">
+                                                    <div class="row align-items-center gx-4">
+                                                        <div class="col text-center text-lg-start mb-5 mb-lg-0">
                                                             <div class="bg-light p-4 rounded-4">
-                                                                <div class="text-primary fw-bolder mb-2">@legalCase.OpenDate.ToShortDateString()</div>
-                                                                <div class="small fw-bolder">@legalCase.Title</div>
-                                                                <div class="small text-muted">@legalCase.Type</div>
-                                                                <div class="small text-muted">Status: @legalCase.Status</div>
+                                                                <div class="text-primary fw-bolder mb-2"> OpenDate: @legalCase.OpenDate.ToShortDateString()</div>
+                                                                <div class="small text-muted"> Case Type: @legalCase.Type</div>
+                                                                
                                                             </div>
                                                         </div>
+
+                                                       
+                                                    <div class="col text-center text-lg-start mb-4 mb-lg-0">
+
                                                         <div class="col-lg-8">
+
                                                             <div>@legalCase.Description</div>
                                                             <!-- Add other case details as needed -->
                                                         </div>
+                                                        
                                                     </div>
+                                                   
                                                 </div>
+                                                    
+                                                
+                                                <div>
+                                                
+                                                  <div class="small text-muted">Status: @legalCase.Status </div>
+                                                   <div class="progress">
+                                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"></div>
+                                                   </div>
+
+                                               </div> 
+                                                </div>
+                                                <a type="button" class="btn btn-outline-primary"
+                                                           asp-area="Lawyer_Area"
+                                                           asp-controller="LawyersHome"
+                                                           asp-action="CaseDetails"
+                                                           asp-route-CaseId="@legalCase.Id">
+                                                    View Details
+                                                </a>
                                             </div>
                                         }
 

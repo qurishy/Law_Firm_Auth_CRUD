@@ -12,7 +12,7 @@ namespace DATA.Repositories.Lawyer_repo
         Task<Personnel?> GetPersonnelUserByIdAsync(string userId);
         Task UpdatePersonnel(Personnel personnel);
 
-        Task Save();
+
 
 
 

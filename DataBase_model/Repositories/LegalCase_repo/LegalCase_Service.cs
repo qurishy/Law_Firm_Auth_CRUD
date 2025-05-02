@@ -18,6 +18,23 @@ namespace DATA.Repositories.LegalCase_repo
 
 
 
+        public async Task<LegalCase> GetCaseDocumentById(int id)
+        {
+            try
+            {
+
+                // Retrieve the LegalCase with its associated documents
+                return await _db.LegalCases
+                    .Include(c => c.Documents) // Include related Documents
+                    .FirstOrDefaultAsync(c => c.Id == id); // Filter by caseId
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
 
 
         public async Task<LegalCase> GetCaseByUserId(string id)
@@ -36,13 +53,100 @@ namespace DATA.Repositories.LegalCase_repo
             {
                 return null;
             }
+        } 
+        
+        
+        
+        public async Task<IEnumerable<LegalCase>> GetAllCasesByUserIdAsync(string userId)
+        {
+            return await _db.LegalCases
+      .Include(a => a.AssignedLawyer)
+      .Where(a => a.AssignedLawyer.UserId == userId)
+      .ToListAsync();
+            ;
         }
 
 
 
-        public Task UpdateAsyc(LegalCase model)
+        public async Task UpdateAsyc(LegalCase model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // Retrieve the existing LegalCase from the database
+                var existingCase = await _db.LegalCases
+                    .Include(c => c.Documents) // Include related Documents
+                    .Include(c => c.Appointments) // Include related Appointments
+                    .FirstOrDefaultAsync(c => c.Id == model.Id);
+
+                if (existingCase == null)
+                {
+                    throw new ArgumentException($"No LegalCase found with ID {model.Id}.");
+                }
+
+                // Update the properties of the existing LegalCase
+                existingCase.Title = model.Title;
+                existingCase.Description = model.Description;
+                existingCase.Type = model.Type;
+                existingCase.Status = model.Status;
+                existingCase.OpenDate = model.OpenDate;
+                existingCase.CloseDate = model.CloseDate;
+
+
+                // Update related collections if necessary
+                if (model.Documents != null)
+                {
+
+
+                    // Add or update documents
+                    foreach (var document in model.Documents)
+                    {
+                        var existingDocument = existingCase.Documents.FirstOrDefault(d => d.Id == document.Id);
+                        if (existingDocument != null)
+                        {
+                            // Update existing document
+                            existingDocument.Title = document.Title;
+                            existingDocument.Description = document.Description;
+                            existingDocument.FilePath = document.FilePath;
+                            existingDocument.UploadDate = document.UploadDate;
+                            existingDocument.UploadedById = document.UploadedById;
+                            existingDocument.IsPrivate = document.IsPrivate;
+                        }
+                        else
+                        {
+                            // Add new document
+                            existingCase.Documents.Add(document);
+                        }
+                    }
+                }
+
+                if (model.Appointments != null)
+                {
+                    // Add or update appointments
+                    foreach (var appointment in model.Appointments)
+                    {
+                        var existingAppointment = existingCase.Appointments.FirstOrDefault(a => a.Id == appointment.Id);
+                        if (existingAppointment != null)
+                        {
+                            // Update existing appointment
+                            existingAppointment.Title = appointment.Title;
+                            existingAppointment.ScheduledTime = appointment.ScheduledTime;
+                            existingAppointment.Notes = appointment.Notes;
+                        }
+                        else
+                        {
+                            // Add new appointment
+                            existingCase.Appointments.Add(appointment);
+                        }
+                    }
+                }
+
+                // Save changes to the database
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("An error occurred while updating the LegalCase.", ex);
+            }
         }
 
 
@@ -112,5 +216,7 @@ namespace DATA.Repositories.LegalCase_repo
             await _db.SaveChangesAsync();
 
         }
+
+      
     }
 }

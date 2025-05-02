@@ -1,4 +1,5 @@
-﻿using DATA.Repositories.Client_repo;
+﻿using DATA.Repositories.Appointment_repo;
+using DATA.Repositories.Client_repo;
 using DATA.Repositories.Lawyer_repo;
 using DATA.Repositories.LegalCase_repo;
 using Law_Model.Models;
@@ -11,12 +12,13 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
 {
     [Area("Client_Area")]
     [Authorize(policy: "ClientOnly")]
-    public class ClientsController(ILegalCase_Service caseService, ILawyer_Service lawyerService, IClient_Service clientService) : Controller
+    public class ClientsController(ILegalCase_Service caseService, ILawyer_Service lawyerService, IClient_Service clientService, IAppointment_Service appointmentService) : Controller
     {
 
         private readonly ILegalCase_Service _caseService = caseService;
         private readonly ILawyer_Service _lawyerService = lawyerService;
         private readonly IClient_Service _clientService = clientService;
+        private readonly IAppointment_Service _appointmentService = appointmentService;
 
 
 
@@ -58,15 +60,122 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
 
             var assignedCases = clien.Cases.ToList();
 
-         
+
 
             return View(assignedCases);
+        }
+
+        // Function to show all appointments of the user
+        public async Task<IActionResult> MyAppointments()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+            IEnumerable<Appointment> appointments = await _appointmentService.GetAllAppointmentsByUserIdClient(userId);
+
+            if (appointments == null || !appointments.Any())
+            {
+                return NotFound();
+            }
+
+            return View(appointments);
+
+
         }
 
 
 
 
+        //===============================================================================
+        //This is the get part of the create appointment page
+        [HttpGet]
+        public async Task<IActionResult> CreateAppointment(int caseId)
+        {
 
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            if (caseId != null)
+            {
+                var appoint = await _appointmentService.Get(x => x.CaseId == caseId);
+
+                if (appoint != null)
+                {
+                    if (appoint.ScheduledTime <= DateTime.Now)
+                    {
+
+                        ViewBag.CaseId = caseId;
+                        return View();
+
+
+
+                    }
+                    else
+                    {
+                        return RedirectToAction("MyAppointments");
+
+
+                    }
+
+                }
+                ViewBag.CaseId = caseId;
+                return View();
+            }
+            return RedirectToAction("MyCases");
+        }
+
+        //This is the post part of the create appointment page
+        [HttpPost]
+        public async Task<IActionResult> CreateAppointment(Appointment model, int caseId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            if(model.ScheduledTime <= DateTime.Now)
+            {
+                return RedirectToAction("CreateAppointment" , new { caseId = caseId });
+            }
+
+
+            if (caseId != null&& model != null)
+            {
+                Appointment apointment = new Appointment
+                {
+                    CaseId = caseId,
+                    Title = model.Title,
+                    Notes = model.Notes,
+                    ScheduledTime = model.ScheduledTime
+
+                };
+
+                await _appointmentService.CreateAppointment(apointment);
+
+                return RedirectToAction("MyAppointments");
+            }
+
+            var result = await _caseService.Get(x => x.Id == caseId);
+
+            return View(result);
+
+
+
+        }
+
+
+        //==========================================================================================
+
+        //This is the get part of the create case page
         [HttpGet]
         public async Task<IActionResult> CreateCase()
         {
@@ -83,11 +192,11 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
             catch (Exception ex)
             {
                 // Log error
-              
+
                 return View(new LegalCase());
             }
         }
-
+        //this is the post part of the create case page
         [HttpPost]
         public async Task<IActionResult> CreateCase(LegalCase model, int lawyerId, List<IFormFile> uploadedDocuments)
         {
@@ -99,106 +208,52 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
             }
 
             var client = await _clientService.GetClientUserByIdAsync(userId);
-            
-                // Create new case
-                LegalCase newCase = new LegalCase
-                {
-                    ClientId = client.Id,
-                    Client = client,
-                    AssignedLawyerId = lawyerId,
-                    Title = model.Title,
-                    Description = model.Description,
-                    Status = Static_datas.CaseStatus.New,
-                    OpenDate = DateTime.UtcNow,
-                    Type = model.Type
-                };
 
-                await _caseService.Add(newCase);
-                await _caseService.SaveAsyc();
-
-                if (uploadedDocuments != null && uploadedDocuments.Count > 0)
-                {
-                    await _caseService.UploadDocsAsync(uploadedDocuments, newCase.Id, userId);
-                }
-
-                return RedirectToAction("MyCases");
-            
-
-            // If we got this far, something failed - repopulate lawyers
-            var lawyers = await _lawyerService.GetAll();
-            ViewBag.Lawyers = lawyers;
-            return View(model);
-        }
-
-
-
-
-        // Functionality to upload documents to a pending case
-        [HttpPost]
-        public async Task<IActionResult> UploadDocument(int caseId, IFormFile document)
-        {
-            if (document == null)
+            // Create new case
+            LegalCase newCase = new LegalCase
             {
-                ModelState.AddModelError("", "Please select a valid document to upload.");
-                return RedirectToAction("MyCases");
+                ClientId = client.Id,
+                Client = client,
+                AssignedLawyerId = lawyerId,
+                Title = model.Title,
+                Description = model.Description,
+                Status = Static_datas.CaseStatus.New,
+                OpenDate = DateTime.UtcNow,
+                Type = model.Type
+            };
+
+            await _caseService.Add(newCase);
+            await _caseService.SaveAsyc();
+
+            if (uploadedDocuments != null && uploadedDocuments.Count > 0)
+            {
+                await _caseService.UploadDocsAsync(uploadedDocuments, newCase.Id, userId);
             }
 
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized();
-            }
-
-            try
-            {
-                // Define the upload path
-                var uploadPath = Path.Combine("wwwroot/uploads", document.FileName);
-
-                // Check if the file already exists
-                if (System.IO.File.Exists(uploadPath))
-                {
-                    // If the file exists, associate it with the case
-                    var documented = new Documented
-                    {
-                        Title = document.FileName,
-                        FilePath = uploadPath,
-                        Description = "Uploaded",
-                        UploadDate = DateTime.UtcNow,
-                        UploadedById = userId,
-                        CaseId = caseId
-                    };
-
-                    // Retrieve the case and add the document
-                    var legalCase = await _caseService.GetCaseByUserId(userId);
-
-                    if (legalCase != null)
-                    {
-                        legalCase.Documents.Add(documented);
-                        await _caseService.UpdateAsyc(legalCase);
-                        await _caseService.SaveAsyc();
-                    }
-
-                    return RedirectToAction("MyCases");
-                }
-                else
-                {
-                    // If the file does not exist, save it
-                    await _caseService.UploadDocsAsync(new List<IFormFile> { document }, caseId, userId);
-
-                    return RedirectToAction("MyCases");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception (optional)
-                // _logger.LogError(ex, "Error uploading document");
-                ModelState.AddModelError("", "An error occurred while uploading the document. Please try again.");
-            }
-
-            // If upload fails, redirect with an error message
-            ModelState.AddModelError("", "Failed to upload the document. Please try again.");
             return RedirectToAction("MyCases");
+
+
+
         }
+
+
+        //=============================================================================================
+
+        //we are deleting the appointment using by using the id
+      
+        public async Task<IActionResult> DeleteAppointment(int Id)
+        {
+          
+            bool result =  await _appointmentService.DeleteAppointmentAsync(Id);
+
+            if (result)
+            { 
+                return RedirectToAction("MyCases");
+              
+            }
+
+             return NotFound();
+        }
+
     }
 }

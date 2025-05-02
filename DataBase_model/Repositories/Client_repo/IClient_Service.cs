@@ -13,7 +13,7 @@ namespace DATA.Repositories.Client_repo
 
         Task UpdateClientAsync(Client client);
 
-        Task SaveAsync();
+
 
 
     }

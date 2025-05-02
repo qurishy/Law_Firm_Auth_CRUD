@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Client>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Client Name</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Address</th>
+            <th scope="col">Date of Birth</th>
+            <th scope="col">Number of Cases</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var client in Model)
+        {
+            <tr>
+                <td>@($"{client.User.FirstName} {client.User.LastName}")</td>
+                <td>@(client.PhoneNumber ?? "N/A")</td>
+                <td>@client.Address</td>
+                <td>@client.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                <td>@client.Cases.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
