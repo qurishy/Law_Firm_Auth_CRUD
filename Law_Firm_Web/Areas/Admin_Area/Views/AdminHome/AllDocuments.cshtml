@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Documented>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Document Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Upload Date</th>
+            <th scope="col">Uploaded By</th>
+            <th scope="col">File</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var document in Model)
+        {
+            <tr>
+                <td>@document.Title</td>
+                <td>@(string.IsNullOrEmpty(document.Description) ? "N/A" : document.Description)</td>
+                <td>@document.UploadDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@($"{document.UploadedBy.FirstName} {document.UploadedBy.LastName}")</td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(document.FilePath))
+                    {
+                        // Remove "wwwroot" from the path when generating the URL
+                        var displayPath = document.FilePath.Replace("wwwroot/", "").Replace("\\", "/");
+                        <a href="@Url.Content($"~/{displayPath}")"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="btn btn-sm btn-outline-primary">
+                            View Document
+                        </a>
+                    }
+                    else
+                    {
+                        <span>No File</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

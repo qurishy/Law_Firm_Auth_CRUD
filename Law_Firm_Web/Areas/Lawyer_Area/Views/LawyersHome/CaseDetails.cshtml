@@ -122,13 +122,21 @@
                                
                                 @if (Model.Documents != null)
                                 {
+                                    
+                                   
                                     <ul class="list-group">
                                         @foreach (var document in Model.Documents)
-                                        {
+                                            {
+                                                var displayPath = document.FilePath.Replace("wwwroot/", "").Replace("\\", "/");
                                             <li class="list-group-item">
                                                 <strong>@document.Title</strong> - Uploaded on @document.UploadDate.ToShortDateString()
                                                 <br />
-                                                <a href="@document.FilePath" target="_blank" class="btn btn-link">View Document</a>
+                                                  
+                                                    <a href="#"
+                                                       onclick="showDocument('@Url.Content($"~/{displayPath}")')"
+                                                       class="btn btn-sm btn-outline-primary">
+                                                        View Document
+                                                    </a>
                                             </li>
                                         }
                                     </ul>
@@ -180,6 +188,21 @@
                 </div>
                
             </div>
+
+
+                <div class="modal fade" id="documentModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="documentModalTitle">Document Preview</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <iframe id="documentFrame" style="width:100%; height:500px; border:none;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
            
         </div>
        
@@ -189,4 +212,11 @@
 
 </div>
 
+<script>
+    function showDocument(url) {
+        document.getElementById('documentFrame').src = url;
+        var modal = new bootstrap.Modal(document.getElementById('documentModal'));
+        modal.show();
+    }
+</script>
 

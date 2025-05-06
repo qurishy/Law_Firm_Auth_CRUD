@@ -2,6 +2,9 @@
 
 
 
+<div class="card text-white bg-secondary mb-auto" style="max-width: auto;">
+    <div class="card-header">All Legal Cases</div>
+
 <table class="table table-hover">
     <thead>
         <tr>
@@ -23,11 +26,18 @@
                 <td>@legalCase.Description</td>
                 <td>@legalCase.Type</td>
                 <td>@legalCase.Status</td>
-                <td>@($"{legalCase.Client.User.FirstName} {legalCase.Client.User.LastName}")</td>
+                <td>@($"{legalCase.Client.User.FirstName} {legalCase.Client.User.LastName}") </td>
                 <td>@(legalCase.AssignedLawyer != null ? $"{legalCase.AssignedLawyer.User.FirstName} {legalCase.AssignedLawyer.User.LastName}" : "Unassigned")</td>
                 <td>@legalCase.OpenDate.ToString("yyyy-MM-dd")</td>
                 <td>@(legalCase.CloseDate.HasValue? legalCase.CloseDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
+                <td>
+                        <a class="btn btn-primary" href="@Url.Action("LegalCaseDetail", "AdminHome", new { id = legalCase.Id })">Details</a>
+                </td>
+             
             </tr>
         }
     </tbody>
 </table>
+
+</div>
+

@@ -10,6 +10,8 @@ namespace DATA.Repositories.Lawyer_repo
         Task<Personnel?> GetPersonnelByCaseIdAsync(int caseId);
 
         Task<Personnel?> GetPersonnelUserByIdAsync(string userId);
+
+        Task<IEnumerable<Personnel>> GetAllLawyersAsync();
         Task UpdatePersonnel(Personnel personnel);
 
 

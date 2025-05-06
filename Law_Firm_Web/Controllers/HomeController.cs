@@ -31,8 +31,12 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
         }
         public async Task<IActionResult> Attorneys()
         {
-            IEnumerable<Personnel> lawyers = await _lawyer.GetAll();
-            ViewBag.Lawyers = lawyers;
+           IEnumerable<Personnel> lawyers = await _lawyer.GetAllLawyersAsync();
+
+            if (lawyers != null)
+            {
+                return View(lawyers);
+            }
 
             return View();
         }

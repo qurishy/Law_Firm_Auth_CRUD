@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Appointment>
+
+
+<h1>All Appointments</h1>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Appointment Title</th>
+            <th scope="col">Scheduled Time</th>
+            <th scope="col">Notes</th>
+            <th scope="col">Client Name</th>
+            <th scope="col">Assigned Lawyer</th>
+            <th scope="col">Is Completed</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointment in Model)
+        {
+            <tr>
+                <td>@appointment.Title</td>
+                <td>@appointment.ScheduledTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@appointment.Notes</td>
+                <td>@($"{appointment.Case.Client.User.FirstName} {appointment.Case.Client.User.LastName}")</td>
+                <td>@(appointment.Case.AssignedLawyer != null ? $"{appointment.Case.AssignedLawyer.User.FirstName} {appointment.Case.AssignedLawyer.User.LastName}" : "Unassigned")</td>
+                <td>@(appointment.IsCompleted.HasValue ? (appointment.IsCompleted.Value ? "Yes" : "No") : "N/A")</td>
+            </tr>
+        }
+    </tbody>
+</table>

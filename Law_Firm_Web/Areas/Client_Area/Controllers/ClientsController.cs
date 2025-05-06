@@ -78,7 +78,7 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
 
             if (appointments == null || !appointments.Any())
             {
-                return NotFound();
+                return View();
             }
 
             return View(appointments);
@@ -106,7 +106,7 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
             {
                 var appoint = await _appointmentService.Get(x => x.CaseId == caseId);
 
-                if (appoint != null)
+                if (appoint == null)
                 {
                     if (appoint.ScheduledTime <= DateTime.Now)
                     {

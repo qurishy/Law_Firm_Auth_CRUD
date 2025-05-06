@@ -10,7 +10,7 @@
 
                 <h1 class="mx-auto my-0 text-uppercase">Your rights, our fight </h1>
                 <h2 class="text-white-50 mx-auto mt-2 mb-5">Justice is the hammer And Law is the Anvil</h2>
-                <a class="btn btn-primary" href="#about">Get Started</a>
+                <a class="btn btn-primary" asp-action="Contacts">Get Started</a>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8">
-                <h2 class="text-white mb-4">Built with Bootstrap 5</h2>
+                <h2 class="text-white mb-4">Delayed Justice is a no Justice</h2>
                 <p class="text-white-50">
                     Where law meets justice - your trusted ally in navigating the legal system to secure the fairness and resolution you deserve.
                     delivering justice through expert legal counsel.
@@ -33,65 +33,66 @@
 </section>
 
 <!-- Projects Section -->
-<section class="projects-section bg-light" id="projects">
+<section class="projects-section bg-light" id="cases">
     <div class="container px-4 px-lg-5">
         <!-- Featured Project Row -->
         <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
-            <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="~/images/bg-masthead.jpg" alt="..." /></div>
+            <div class="col-xl-8 col-lg-7">
+                <a class="link-black" asp-action="Attorneys"> <img class="img-fluid mb-3 mb-lg-0" src="https://filevine-marketing-production-media.s3.amazonaws.com/media/images/blogs/2024/08/evolution-of-legal-teams-1.png" alt="Our Legal Team" style="width: 100%; max-width: 600px; height: auto;" /> </a>
+            </div>
             <div class="col-xl-4 col-lg-5">
                 <div class="featured-text text-center text-lg-left">
-                    <h4>Shoreline</h4>
-                    <p class="text-black-50 mb-0">Grayscale is open source and MIT licensed. This means you can use it for any project - even commercial projects! Download it, customize it, and publish your website!</p>
+                    <h4>Justice. Integrity. Excellence.</h4>
+                    <p class="text-black-50 mb-0">
+                        At <strong>Hartwell & Partners</strong>, we champion your rights with unwavering dedication.
+                        From corporate litigation to personal injury claims, our team delivers results with precision
+                        and compassion. Trusted by clients for over 20 years.
+                    </p>
                 </div>
             </div>
         </div>
-        <!-- Project One Row -->
+
+        <!-- Project One: Corporate Law -->
         <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
-            <div class="col-lg-6"><img class="img-fluid" src="~/images/demo-image-01.jpg" alt="..." /></div>
             <div class="col-lg-6">
-                <div class="bg-black text-center h-100 project">
+                <img class="img-fluid" src="https://www.onlinedegree.com/wp-content/uploads/2017/02/corporate_lawyer.jpg" alt="Corporate Law Cases" />
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-dark text-center h-100 project">
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-left">
-                            <h4 class="text-white">Misty</h4>
-                            <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                            <h4 class="text-white">Corporate & Business Law</h4>
+                            <p class="mb-0 text-white-50">
+                                We safeguard your business interests with tailored legal solutions:
+                                mergers, acquisitions, contract disputes, and compliance.
+                                Let us handle the complexities while you focus on growth.
+                            </p>
                             <hr class="d-none d-lg-block mb-0 ms-0" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Project Two Row -->
+
+        <!-- Project Two: Personal Injury -->
         <div class="row gx-0 justify-content-center">
-            <div class="col-lg-6"><img class="img-fluid" src="~/images/demo-image-02.jpg" alt="..." /></div>
+            <div class="col-lg-6">
+                <img class="img-fluid" src="https://oguz.law/wp-content/webp-express/webp-images/uploads/personal-injury-image-1.png.webp" alt="Personal Injury Advocacy" />
+            </div>
             <div class="col-lg-6 order-lg-first">
-                <div class="bg-black text-center h-100 project">
+                <div class="bg-dark text-center h-100 project">
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-right">
-                            <h4 class="text-white">Mountains</h4>
-                            <p class="mb-0 text-white-50">Another example of a project with its respective description. These sections work well responsively as well!</p>
+                            <h4 class="text-white">Personal Injury Advocacy</h4>
+                            <p class="mb-0 text-white-50">
+                                Injured due to negligence? We fight for your compensation.
+                                Our track record includes multi-million-dollar settlements for
+                                auto accidents, medical malpractice, and workplace injuries.
+                            </p>
                             <hr class="d-none d-lg-block mb-0 me-0" />
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Signup Section -->
-<section class="signup-section" id="signup">
-    <div class="container px-4 px-lg-5">
-        <div class="row gx-4 gx-lg-5">
-            <div class="col-md-10 col-lg-8 mx-auto text-center">
-                <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
-                <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
-                <form class="form-signup" id="contactForm" data-sb-form-api-token="API_TOKEN">
-                    <!-- Email address input-->
-                    <div class="row input-group-newsletter">
-                        <div class="col"><input class="form-control" id="emailAddress" type="email" placeholder="Enter email address..." aria-label="Enter email address..." data-sb-validations="required,email" /></div>
-                        <div class="col-auto"><button class="btn btn-primary disabled" id="submitButton" type="submit">Notify Me!</button></div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>

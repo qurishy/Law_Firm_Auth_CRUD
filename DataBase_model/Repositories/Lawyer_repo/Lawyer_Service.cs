@@ -107,7 +107,22 @@ namespace DATA.Repositories.Lawyer_repo
 
         }
 
+        public async Task<IEnumerable<Personnel>> GetAllLawyersAsync()
+        {
+            try
+            {
+                IEnumerable<Personnel> lawyers = await _db.Personnel
+                    .Include(c => c.User)
+                    .ToListAsync();
 
+                return lawyers;
 
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }

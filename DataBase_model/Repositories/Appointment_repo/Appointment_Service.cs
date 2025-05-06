@@ -33,8 +33,8 @@ namespace DATA.Repositories.Appointment_repo
         {
             return await _db.Appointments
                 .Include(a => a.Case)
-                .ThenInclude(c => c.AssignedLawyer)
-                .Where(a => a.Case.AssignedLawyer.UserId == userId)
+                .ThenInclude(c => c.Client)
+                .Where(a => a.Case.Client.UserId == userId)
                 .ToListAsync();
         }
 

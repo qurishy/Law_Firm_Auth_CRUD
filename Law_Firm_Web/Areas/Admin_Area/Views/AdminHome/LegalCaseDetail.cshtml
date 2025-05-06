@@ -1,0 +1,91 @@
+﻿@model LegalCase
+
+
+
+<div class="card border-primary mb-auto" style="max-width: auto;">
+    <div class="card-header"><h2>Case Details</h2></div>
+
+    <div class="card-body">
+
+
+    <!-- Legal Case Information -->
+        <h4 class="card-title">Case Information</h4>
+        <p class="card-text"><strong>Title:</strong> @Model.Title</p>
+        <p class="card-text"><strong>Description:</strong> @Model.Description</p>
+        <p class="card-text"><strong>Type:</strong> @Model.Type</p>
+        <p class="card-text"><strong>Status:</strong> @Model.Status</p>
+        <p class="card-text"><strong>Open Date:</strong> @Model.OpenDate.ToString("yyyy-MM-dd")</p>
+    @if (Model.CloseDate.HasValue)
+    {
+        <p><strong>Close Date:</strong> @Model.CloseDate.Value.ToString("yyyy-MM-dd")</p>
+    }
+
+    <hr />
+
+    <!-- Client Information -->
+        <h4 class="card-title">Client Information</h4>
+        <div class="client-info d-flex align-items-center">
+            <div class="me-3">
+                <img src="@Model.Client.User.ProfilePicture" alt="Client Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;" />
+            </div>
+            <div>
+                <p><strong>Name:</strong> @Model.Client.User.FirstName @Model.Client.User.LastName</p>
+                <p><strong>Address:</strong> @Model.Client.Address</p>
+                <p><strong>Phone Number:</strong> @Model.Client.PhoneNumber</p>
+                <p><strong>Date of Birth:</strong> @Model.Client.DateOfBirth.ToString("yyyy-MM-dd")</p>
+            </div>
+
+    </div>
+
+    <hr />
+
+    <!-- Assigned Lawyer Information -->
+    @if (Model.AssignedLawyer != null)
+    {
+        <h4 class="card-title">Assigned Lawyer Information</h4>
+        <div class="lawyer-info d-flex align-items-center">
+            <div class="me-3">
+                <img src="@Model.AssignedLawyer.User.ProfilePicture" alt="Lawyer Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;" />
+            </div>
+            <div>
+                <p><strong>Name:</strong> @Model.AssignedLawyer.User.FirstName @Model.AssignedLawyer.User.LastName</p>
+                <p><strong>Position:</strong> @Model.AssignedLawyer.Position</p>
+                <p><strong>Department:</strong> @Model.AssignedLawyer.Department</p>
+                <p><strong>Hire Date:</strong> @Model.AssignedLawyer.HireDate.ToString("yyyy-MM-dd")</p>
+            </div>
+        </div>
+    }
+
+    <hr />
+
+    <!-- Documents -->
+        <h4 class="card-title">Documentse</h4>
+    @if (Model.Documents != null && Model.Documents.Any())
+    {
+        <ul>
+            @foreach (var document in Model.Documents)
+            {
+                 
+                <li>
+                    <p><strong>Title:</strong> @document.Title</p>
+                    <p><strong>Description:</strong> @document.Description</p>
+                    <p><strong>Uploaded By:</strong> @document.UploadedBy.FirstName @document.UploadedBy.LastName</p>
+                    <p><strong>Upload Date:</strong> @document.UploadDate.ToString("yyyy-MM-dd")</p>
+                    <a href="@document.FilePath" target="_blank">View Document</a>
+                        <hr />
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No documents available for this case.</p>
+    }
+
+
+   </div>
+
+    <a class="btn btn-danger" asp-area="Admin_Area"  asp-controller="AdminHome" asp-action="DeleteLegalCase" asp-route-id="@Model.Id">Delete</a>
+
+    <a class="btn btn-secondary" href="@Url.Action("AllLegalCase", "AdminHome")">>Back to All Legal Cases</a>
+</div>

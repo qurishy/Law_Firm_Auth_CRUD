@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<Client>
 
+<h1>All Client</h1>
+
+<div class="card text-white bg-warning mb-auto" style="max-width: auto;">
+    <div class="card-header">All Clients Info</div>
+
 <table class="table table-hover">
     <thead>
         <tr>
@@ -8,18 +13,26 @@
             <th scope="col">Address</th>
             <th scope="col">Date of Birth</th>
             <th scope="col">Number of Cases</th>
+            <th scope="col">Romove</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var client in Model)
         {
-            <tr>
+                
+            <tr class="table-dark">
                 <td>@($"{client.User.FirstName} {client.User.LastName}")</td>
                 <td>@(client.PhoneNumber ?? "N/A")</td>
                 <td>@client.Address</td>
                 <td>@client.DateOfBirth.ToString("yyyy-MM-dd")</td>
                 <td>@client.Cases.Count</td>
+                <td> 
+                    <div>
+                            <a class="btn btn-danger" asp-area="Admin_Area" asp-action="DeleteClient" asp-controller="AdminHome" asp-route-id="@client.Id">Delete</a>
+                    </div>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+</div>
