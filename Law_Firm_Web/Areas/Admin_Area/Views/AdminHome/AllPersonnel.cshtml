@@ -2,45 +2,66 @@
     var personnelWithCaseCounts = ViewData["PersonnelWithCaseCounts"] as IEnumerable<dynamic>;
 }
 
-<h1>All Personnel</h1>
 
-<div class="card text-white bg-info mb-auto" style="max-width: auto;">
-    <div class="card-header">All Personnel Info</div>
+<section class="py-5">
+    <div class="container px-5">
+        <!-- Contact form-->
+        <div class="bg-light rounded-4 py-5 px-4 px-md-5">
+            <div class="text-center mb-5">
+                <div class="feature bg-primary bg-gradient-primary-to-secondary text-white rounded-3 mb-3"><i class="bi bi-envelope"></i></div>
+                <h1 class="fw-bolder">All Personnel</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Department</th>
-            <th>Hire Date</th>
-            <th>Phone Number</th>
-            <th>Assigned Case Count</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (personnelWithCaseCounts != null)
-        {
-            foreach (var item in personnelWithCaseCounts)
-            {
-                 
-                <tr class="table-success">
+            </div>
+            
+            <div class="card text-white bg-info mb-auto" style="max-width: auto;">
+                <div class="card-header">All Personnel Info</div>
 
-                    <td>@item.Personnel.User.FirstName @item.Personnel.User.LastName</td>
-                    <td>@item.Personnel.Position</td>
-                    <td>@item.Personnel.Department</td>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Department</th>
+                            <th>Hire Date</th>
+                            <th>Phone Number</th>
+                            <th>Assigned Case Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (personnelWithCaseCounts != null)
+                        {
+                            foreach (var item in personnelWithCaseCounts)
+                            {
 
-                    <td>@item.Personnel.HireDate</td>
-                    <td>@(item?.Personnel.User.PhoneNumber?? item.Personnel.User.PhoneNumber ?? "N/A")</td>
-                    <td>@(item?.AssignedCaseCount ?? 0)</td>
-                    <td>
-                            <div>
-                                <a class="btn btn-danger" asp-area="Admin_Area" asp-controller="AdminHome" asp-action="DeletePersonel" asp-route-id="@item.Personnel.Id">Delete</a>
-                            </div>
-                    </td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
-</div>
+                                <tr class="table-success">
+
+                                    <td>@item.Personnel.User.FirstName @item.Personnel.User.LastName</td>
+                                    <td>@item.Personnel.Position</td>
+                                    <td>@item.Personnel.Department</td>
+
+                                    <td>@item.Personnel.HireDate</td>
+                                    <td>@(item?.Personnel.User.PhoneNumber?? item.Personnel.User.PhoneNumber ?? "N/A")</td>
+                                    <td>@(item?.AssignedCaseCount ?? 0)</td>
+                                    <td>
+                                        <div>
+                                            <a class="btn btn-danger" asp-area="Admin_Area" asp-controller="AdminHome" asp-action="DeletePersonel" asp-route-id="@item.Personnel.Id">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                
+            </div>
+            <div class="text-center mb-5">
+                <a class="btn btn-secondary" href="@Url.Action("Index", "AdminHome")">>Back to Home</a>
+
+            </div>
+         
+
+        </div>
+    
+    </div>
+</section>
+

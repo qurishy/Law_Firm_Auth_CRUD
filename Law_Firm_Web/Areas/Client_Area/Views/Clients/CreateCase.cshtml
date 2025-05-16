@@ -39,7 +39,7 @@
                     {
                         if (lawyer != null)
                         {
-                            <option value="@lawyer.Id">(@lawyer.Position)</option>
+                            <option value="@lawyer.Id"> @lawyer.User.FirstName @lawyer.User.LastName (@lawyer.Position)</option>
                         }
                     }
                 }

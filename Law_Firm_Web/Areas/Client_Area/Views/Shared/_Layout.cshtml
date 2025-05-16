@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Law_Firm_Web.styles.css" asp-append-version="true" />
+
+
+
+
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <header>
@@ -34,6 +39,12 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="Client_Area" asp-controller="Clients" asp-action="MyAppointments">Appointments</a>
+
+
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Client_Area" asp-controller="Clients" asp-action="MyDocuments">MyDocuments</a>
                             </li>
                         }
                         else

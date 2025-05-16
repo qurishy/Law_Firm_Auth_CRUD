@@ -1,9 +1,12 @@
 using DATA.Repositories.Appointment_repo;
+using DATA.Repositories.Chat_Repo;
 using DATA.Repositories.Client_repo;
 using DATA.Repositories.Document_repo;
 using DATA.Repositories.Lawyer_repo;
 using DATA.Repositories.LegalCase_repo;
 using DataAccess.Data;
+using Law_Firm_Web.Areas;
+using Law_Firm_Web.Hubs;
 using Law_Model.Models;
 using Law_Model.Utility;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +17,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddSignalR();
+
+
 
 
 
@@ -27,6 +33,8 @@ builder.Services.AddScoped<ILawyer_Service, Lawyer_Service>();
 builder.Services.AddScoped<ILegalCase_Service, LegalCase_Service>(); // Add Scoped Services<ILegalCase_Service>
 builder.Services.AddScoped<IDocument_Service, Document_Service>(); // Add Scoped Services<ILawyer_Service>
 builder.Services.AddScoped<IAppointment_Service, Appointment_Service>(); // Add Scoped Services<IClient_Service>
+builder.Services.AddScoped<IChat_Repo, Chat_Repo>();
+
 
 
 
@@ -80,6 +88,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorPages();
+
+app.MapHub<ChatHub>("/chatHub");
 
 // Area route should come first
 app.MapControllerRoute(

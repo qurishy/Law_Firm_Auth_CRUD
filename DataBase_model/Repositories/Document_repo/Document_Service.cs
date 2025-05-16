@@ -2,6 +2,7 @@
 using DataAccess.Repositories;
 using Law_Model.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace DATA.Repositories.Document_repo
 {
@@ -15,6 +16,26 @@ namespace DATA.Repositories.Document_repo
 
         }
 
+        public async Task<IEnumerable<Documented>> GetAllDocumentBYUserIdAsync(string userId)
+        {
+
+            try
+            {
+                var documents =await _db.Documents.Where(d => d.UploadedById == userId)
+                    .Include(d => d.UploadedBy)
+                    .ToListAsync();
+
+
+
+                return (documents);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error retrieving documents: " + ex.Message);
+                return null;
+            }
+
+        }
 
         public async Task SaveAsyc(Documented model)
         {

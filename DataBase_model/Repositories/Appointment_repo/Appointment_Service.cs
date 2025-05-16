@@ -92,6 +92,7 @@ namespace DATA.Repositories.Appointment_repo
 
                 _db.Appointments.Update(existingAppointment);
                 await _db.SaveChangesAsync();
+                return;
             }
             catch (Exception ex)
             {

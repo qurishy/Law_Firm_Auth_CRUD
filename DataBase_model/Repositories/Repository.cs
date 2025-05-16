@@ -18,11 +18,13 @@ namespace DataAccess.Repositories
         public async Task Add(T Entity)
         {
             await dbset.AddAsync(Entity);
+            await _context.SaveChangesAsync();
         }
 
         public async Task Delete(T Entity)
         {
             dbset.Remove(Entity);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteRange(IEnumerable<T> entities)

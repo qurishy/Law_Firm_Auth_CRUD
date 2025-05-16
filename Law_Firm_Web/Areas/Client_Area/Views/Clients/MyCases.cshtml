@@ -56,6 +56,8 @@
  *@
 
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
 @using Law_Model.Models
 @model IEnumerable<LegalCase>
 
@@ -80,10 +82,33 @@
                     <h5 class="card-title">Case Type: @legalCase.Type</h5>
                     <h6 class="card-subtitle text-muted">Status: @legalCase.Status</h6>
                 </div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
-                    <rect width="100%" height="100%" fill="#868e96"></rect>
-                    <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
-                </svg>
+                <div class="card-body">
+                    @if (legalCase.Documents != null)
+                    {
+
+
+                        <ul class="list-group">
+                            @foreach (var document in legalCase.Documents)
+                            {
+                                var displayPath = document.FilePath.Replace("wwwroot/", "").Replace("\\", "/");
+                                <li class="list-group-item">
+                                    <strong>@document.Title</strong> - Uploaded on @document.UploadDate.ToShortDateString()
+                                    <br />
+
+                                    <a href="#"
+                                       onclick="showDocument('@Url.Content($"~/{displayPath}")')"
+                                       class="btn btn-sm btn-outline-primary">
+                                        View Document
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>No documents available for this case.</p>
+                    }
+                </div>
                 <div class="card-body">
                     <p class="card-text">@legalCase.Description</p>
                 </div>
@@ -99,4 +124,28 @@
             No cases found for your account.
         </div>
     }
+
+    <div class="modal fade" id="documentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="documentModalTitle">Document Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="documentFrame" style="width:100%; height:500px; border:none;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
+
+
+<script>
+    function showDocument(url) {
+        document.getElementById('documentFrame').src = url;
+        var modal = new bootstrap.Modal(document.getElementById('documentModal'));
+        modal.show();
+    }
+</script>

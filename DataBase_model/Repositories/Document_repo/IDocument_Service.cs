@@ -6,7 +6,11 @@ namespace DATA.Repositories.Document_repo
 {
     public interface IDocument_Service : IRepository<Documented>
     {
+
+        Task<IEnumerable<Documented>> GetAllDocumentBYUserIdAsync(string userId);
+
         Task UploadDocsAsync(List<IFormFile> files, int caseId, string userId);
+
         Task UpdateAsyc(Documented model);
 
         Task SaveAsyc(Documented model);

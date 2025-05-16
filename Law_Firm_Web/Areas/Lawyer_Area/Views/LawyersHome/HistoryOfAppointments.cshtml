@@ -161,8 +161,9 @@
                                                     <th scope="row">@appointment.Title</th>
                                                     <td>@appointment.ScheduledTime.ToString("yyyy-MM-dd HH:mm")</td>
                                                     <td>@appointment.Notes</td>
-                                                    <td>@(appointment.IsCompleted == true ? "Completed" : "Pending")</td>
-                                                </tr>
+
+                                                        <td>@(appointment.IsCompleted == true ? "Completed" : appointment.IsCompleted == false ? "Decline" : "Pending")</td>
+                                                    </tr>
                                             }
                                         }
                                         else

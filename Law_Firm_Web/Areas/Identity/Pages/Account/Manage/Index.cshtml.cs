@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using DATA.Repositories.Client_repo;
+using DATA.Repositories.Lawyer_repo;
 using Law_Model.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,13 +16,19 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILawyer_Service _lawyer_service;
+        private readonly IClient_Service _client_service;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IClient_Service client_service,
+            ILawyer_Service lawyer_service)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _client_service=client_service;
+            _lawyer_service=lawyer_service;
         }
 
         /// <summary>
@@ -79,7 +87,35 @@ namespace Law_Firm_Web.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            await LoadAsync(user);
+            var userRole = await _userManager.GetRolesAsync(user);
+            var isLawyer = userRole.Contains("Lawyer");
+            var isClient = userRole.Contains("Client");
+
+            if (isLawyer)
+            {
+                var lawyerInfo = await _lawyer_service.GetPersonnelUserByIdAsync(user.Id);
+                if (lawyerInfo != null)
+                {
+                    var photo = lawyerInfo.User.ProfilePicture;
+
+                    ViewData["ProfilePicture"] = photo;
+                }
+
+            }
+            else if (isClient)
+            {
+                var clientInfo = await _client_service.GetClientUserByIdAsync(user.Id);
+                if (clientInfo != null)
+                {
+                    var photo = clientInfo.User.ProfilePicture; 
+                
+                    ViewData["ProfilePicture"] = photo;
+                }
+                
+            }
+        
+
+                await LoadAsync(user);
             return Page();
         }
 

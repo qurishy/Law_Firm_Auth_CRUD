@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Law_Firm_Web.styles.css" asp-append-version="true" />
 
+
+
+    @RenderSection("Styles", required: false)
+
     <style>
         .bento-item {
             height: 200px;
@@ -54,6 +58,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarColor01">
                                    <ul class="navbar-nav me-auto">
+
                                        <li class="nav-item">
                                            <a class="nav-link active" asp-area="Admin_Area" asp-controller="AdminHome" asp-action="Index">
                                                Home
@@ -61,17 +66,8 @@
                                            </a>
                                        </li>
 
-                                       <li class="nav-item">
-                                          <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register Employ</a>  
-                                      </li>
-                                    
-                                       <li class="nav-item">
-                                           <a class="nav-link " href="#">Pricing</a>
-                                       </li>
-                                       <li class="nav-item">
-                                           <a class="nav-link " href="#">About</a>
-                                       </li>
-                                   </ul>
+                                      
+                                  </ul>
 
                     <partial name="_LoginPartial" />
                                                      

@@ -23,6 +23,10 @@
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
 
+
+
+    @RenderSection("Styles", required: false)
+
     <style>
         html, body {
             height: 100%;
@@ -38,9 +42,7 @@
             padding-top: 80px; /* Adjust based on your navbar height */
         }
 
-        footer {
-            flex-shrink: 0;
-        }
+     
 
         /* Fix for fixed navbar overlapping content */
         section {
@@ -49,6 +51,8 @@
     </style>
 </head>
 <body id="page-top">
+
+
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-transparent" id="mainNav">
         <div class="container px-4 px-lg-5">

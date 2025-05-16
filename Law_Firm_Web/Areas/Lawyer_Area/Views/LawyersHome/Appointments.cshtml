@@ -140,8 +140,8 @@
                                                                     </p>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("AcceptAppointment", "LawyersHome", new { area = "Lawyer_Area", id = apoint.Id, decision = true })'">Accept</button>
-                                                                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("AcceptAppointment", "LawyersHome", new { area = "Lawyer_Area", id = apoint.Id, decision = false })'">Decline</button>
+                                                                    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("AcceptAppointment", "LawyersHome", new { area = "Lawyer_Area", id = apoint.CaseId, decision = true })'">Accept</button>
+                                                                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("AcceptAppointment", "LawyersHome", new { area = "Lawyer_Area", id = apoint.CaseId, decision = false })'">Decline</button>
                                                                    
                                                                 </div>
                                                             </div>

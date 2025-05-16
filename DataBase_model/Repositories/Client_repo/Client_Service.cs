@@ -83,6 +83,7 @@ namespace DATA.Repositories.Client_repo
                 return await _db.Clients
                     .Include(p => p.User) // Include related ApplicationUser
                     .Include(p => p.Cases)
+                    .ThenInclude(c => c.Documents)
                     .FirstOrDefaultAsync(p => p.UserId == userId);
             }
             catch (Exception ex)

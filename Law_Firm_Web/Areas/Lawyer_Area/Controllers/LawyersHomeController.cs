@@ -130,7 +130,7 @@ namespace Law_Firm_Web.Areas.Lawyer_Area.Controllers
             return View(legalCase);
         }
 
-
+        // Function to show history of appointments and cases for the lawyer
 
         [HttpGet]
         public async Task<IActionResult> HistoryOfAppointments()
@@ -142,15 +142,19 @@ namespace Law_Firm_Web.Areas.Lawyer_Area.Controllers
                 return Unauthorized();
 
             }
+            // Create a new instance of ModelView to hold the combined data
 
             ModelView combinedModel = new ModelView();
-           
+
+            // Get the lawyer's information
+
             var legalCase = await _legalcase_service.GetAllCasesByUserIdAsync(userId);
 
             if (legalCase == null)
             {
                 return NotFound();
             }
+
             // Filter the legal cases to only include those with the specified caseId
             legalCase = legalCase.Where(c => c.Status == CaseStatus.Closed || c.Status == CaseStatus.Archived);
             legalCase = legalCase.OrderBy(c => c.OpenDate).ToList();
@@ -158,16 +162,16 @@ namespace Law_Firm_Web.Areas.Lawyer_Area.Controllers
             combinedModel.LegalCase = legalCase.ToList();
             
 
-            var appointments = await _appointment_service.GetAllAppointmentsByUserIdClient(userId);
+            var appointments = await _appointment_service.GetAllAppointmentsByUserIdLawyer(userId);
 
             if (appointments == null)
             {
                 return NotFound();
             }
             // Filter the appointments to only include those with the passed appointmentId
-            appointments = appointments.Where(a => a.IsCompleted != null);
+           // appointments = appointments.Where(a => a.IsCompleted != null);
             appointments = appointments.OrderBy(a => a.ScheduledTime).ToList();
-            appointments = appointments.Where(a => a.ScheduledTime <= DateTime.Now).ToList();
+            //appointments = appointments.Where(a => a.ScheduledTime <= DateTime.Now).ToList();
 
 
             combinedModel.Appointment = appointments.ToList();

@@ -1,5 +1,6 @@
 ﻿using DATA.Repositories.Appointment_repo;
 using DATA.Repositories.Client_repo;
+using DATA.Repositories.Document_repo;
 using DATA.Repositories.Lawyer_repo;
 using DATA.Repositories.LegalCase_repo;
 using Law_Model.Models;
@@ -12,13 +13,14 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
 {
     [Area("Client_Area")]
     [Authorize(policy: "ClientOnly")]
-    public class ClientsController(ILegalCase_Service caseService, ILawyer_Service lawyerService, IClient_Service clientService, IAppointment_Service appointmentService) : Controller
+    public class ClientsController(ILegalCase_Service caseService, ILawyer_Service lawyerService, IClient_Service clientService, IAppointment_Service appointmentService, IDocument_Service d) : Controller
     {
 
         private readonly ILegalCase_Service _caseService = caseService;
         private readonly ILawyer_Service _lawyerService = lawyerService;
         private readonly IClient_Service _clientService = clientService;
         private readonly IAppointment_Service _appointmentService = appointmentService;
+        private readonly IDocument_Service _d = d;
 
 
 
@@ -86,6 +88,28 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
 
         }
 
+        //this is the get part of the MyDocuments page
+        public async Task<IActionResult> MyDocuments()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+           var documents = await _d.GetAllDocumentBYUserIdAsync(userId);
+
+            if (documents == null || !documents.Any())
+            {
+                return View();
+            }
+
+            return View(documents);
+
+
+        }
+
 
 
 
@@ -106,7 +130,7 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
             {
                 var appoint = await _appointmentService.Get(x => x.CaseId == caseId);
 
-                if (appoint == null)
+                if (appoint != null)
                 {
                     if (appoint.ScheduledTime <= DateTime.Now)
                     {
@@ -182,7 +206,7 @@ namespace Law_Firm_Web.Areas.Client_Area.Controllers
             try
             {
                 var model = new LegalCase();
-                var lawyers = await _lawyerService.GetAll();
+                var lawyers = await _lawyerService.GetAllLawyersAsync();
 
                 // Ensure lawyers is not null before passing to view
                 ViewBag.Lawyers = lawyers.ToList() ?? new List<Personnel>();

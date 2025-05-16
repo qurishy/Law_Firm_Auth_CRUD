@@ -1,4 +1,5 @@
 ﻿using Law_Model.Models;
+using Law_Model.Models.Message_model;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,9 @@ namespace DataAccess.Data
         public DbSet<Documented> Documents { get; set; }
 
         public DbSet<Appointment> Appointments { get; set; }
+
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+
 
 
 
@@ -55,7 +59,19 @@ namespace DataAccess.Data
                 .HasForeignKey(c => c.ClientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Configure ChatMessage relationships
+            modelBuilder.Entity<ChatMessage>()
+                .HasOne(cm => cm.Sender)
+                .WithMany()
+                .HasForeignKey(cm => cm.SenderId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<ChatMessage>()
+                .HasOne(cm => cm.Receiver)
+                .WithMany()
+                .HasForeignKey(cm => cm.ReceiverId)
+        
+                .OnDelete(DeleteBehavior.Restrict); // Use Restrict for Receiver
 
 
         }

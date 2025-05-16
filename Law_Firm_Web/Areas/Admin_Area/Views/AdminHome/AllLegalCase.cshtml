@@ -1,43 +1,59 @@
 ﻿@model IEnumerable<LegalCase>
 
 
+<section class="py-5">
+    <div class="container px-5">
+        <!-- Contact form-->
+        <div class="bg-light rounded-4 py-5 px-4 px-md-5">
+            <div class="text-center mb-5">
+                <div class="feature bg-primary bg-gradient-primary-to-secondary text-white rounded-3 mb-3"><i class="bi bi-envelope"></i></div>
+                <h1 class="fw-bolder">All Legal Cases</h1>
 
-<div class="card text-white bg-secondary mb-auto" style="max-width: auto;">
-    <div class="card-header">All Legal Cases</div>
+            </div>
 
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Case Title</th>
-            <th scope="col">Description</th>
-            <th scope="col">Type</th>
-            <th scope="col">Status</th>
-            <th scope="col">Client Name</th>
-            <th scope="col">Assigned Lawyer</th>
-            <th scope="col">Open Date</th>
-            <th scope="col">Close Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var legalCase in Model)
-        {
-            <tr class="@(legalCase.Status == Law_Model.Static_file.Static_datas.CaseStatus.Closed ? "table-success" : "table-warning")">
-                <td>@legalCase.Title</td>
-                <td>@legalCase.Description</td>
-                <td>@legalCase.Type</td>
-                <td>@legalCase.Status</td>
-                <td>@($"{legalCase.Client.User.FirstName} {legalCase.Client.User.LastName}") </td>
-                <td>@(legalCase.AssignedLawyer != null ? $"{legalCase.AssignedLawyer.User.FirstName} {legalCase.AssignedLawyer.User.LastName}" : "Unassigned")</td>
-                <td>@legalCase.OpenDate.ToString("yyyy-MM-dd")</td>
-                <td>@(legalCase.CloseDate.HasValue? legalCase.CloseDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
-                <td>
-                        <a class="btn btn-primary" href="@Url.Action("LegalCaseDetail", "AdminHome", new { id = legalCase.Id })">Details</a>
-                </td>
-             
-            </tr>
-        }
-    </tbody>
-</table>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Case Title</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Client Name</th>
+                        <th scope="col">Assigned Lawyer</th>
+                        <th scope="col">Open Date</th>
+                        <th scope="col">Close Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var legalCase in Model)
+                    {
+                        <tr class="@(legalCase.Status == Law_Model.Static_file.Static_datas.CaseStatus.Closed ? "table-success" : "table-warning")">
+                            <td>@legalCase.Title</td>
+                            <td>@legalCase.Description</td>
+                            <td>@legalCase.Type</td>
+                            <td>@legalCase.Status</td>
+                            <td>@($"{legalCase.Client.User.FirstName} {legalCase.Client.User.LastName}") </td>
+                            <td>@(legalCase.AssignedLawyer != null ? $"{legalCase.AssignedLawyer.User.FirstName} {legalCase.AssignedLawyer.User.LastName}" : "Unassigned")</td>
+                            <td>@legalCase.OpenDate.ToString("yyyy-MM-dd")</td>
+                            <td>@(legalCase.CloseDate.HasValue? legalCase.CloseDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
+                            <td>
+                                <a class="btn btn-primary" href="@Url.Action("LegalCaseDetail", "AdminHome", new { id = legalCase.Id })">Details</a>
+                            </td>
 
-</div>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="text-center mb-5">
+                <a class="btn btn-secondary" href="@Url.Action("Index", "AdminHome")">>Back to Home</a>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
 

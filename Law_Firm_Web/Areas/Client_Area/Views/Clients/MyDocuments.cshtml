@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Documented>
+
+<section class="py-5">
+    <div class="container px-5">
+        <div class="bg-light rounded-4 py-5 px-4 px-md-5">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h2 class="text-primary fw-bolder mb-0">Case Documents</h2>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Upload Date</th>
+                        <th scope="col">Case Title</th>
+                        <th scope="col">Document</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var document in Model)
+                        {
+                            <tr class="table-info">
+                                <td>@document.Title</td>
+                                <td>@document.Description</td>
+                                <td>@document.UploadDate.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>@document.Case?.Title</td>
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(document.FilePath))
+                                    {
+
+                                        var displayPath = document.FilePath.Replace("wwwroot/", "").Replace("\\", "/");
+                                        <a href="@Url.Content($"~/{displayPath}")"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           class="btn btn-sm btn-outline-primary">
+                                            View Document
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span>No File</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center">No documents found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
